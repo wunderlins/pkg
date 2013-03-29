@@ -1,0 +1,387 @@
+Change Log for file:///home/svn/upkg/TRUNK
+Subversion Revision: 195 2012-01-09 22:17:28 +0100 Simon
+Generation Date: 2012-01-10 22:41:36 +0100
+________________________________________________________________________________
+
+2012-01-10  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r204] Makefile, tools/checkinstall.sh: path correcton
+	* [r203] Makefile, tools/checkinstall.sh: build process without
+	  errors
+	* [r202] Makefile, tools/checkinstall.sh: no todo for deb
+	* [r201] Makefile, upkg.cpp: cleaned up argc/argv useage
+	* [r200] Makefile, builds/pk_1.1.7-1_amd64.deb,
+	  builds/pk_1.1.7-1_i686.deb, builds/pk_1.1.8-1_amd64.deb,
+	  builds/pk_1.1.8-1_i686.deb, upkg.cpp: bugfix for pkh
+
+2012-01-09  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r199] Makefile, builds/pk_1.1.6-1_amd64.deb,
+	  builds/pk_1.1.6-1_i686.deb, tools/checkinstall.sh: fixed build
+	  bug
+	* [r198] upkg.cpp: added note for fixes
+	* [r197] upkg.cpp: added note for fixes
+	* [r196] upkg.cpp: added note for fixes
+
+2012-01-09  Simon Wunderlin
+
+	* [r195] builds/pk_1.1.1-1_amd64.deb, builds/pk_1.1.1-1_i686.deb,
+	  builds/pk_1.1.2-1_amd64.deb, builds/pk_1.1.2-1_i686.deb,
+	  builds/pk_1.1.3-1_amd64.deb, builds/pk_1.1.3-1_i686.deb,
+	  builds/pk_1.1.4-1_amd64.deb, builds/pk_1.1.4-1_i686.deb,
+	  builds/pk_1.1.5-1_amd64.deb, builds/pk_1.1.5-1_i686.deb,
+	  builds/pk_1.1.6-1_amd64.deb, builds/pk_1.1.6-1_i686.deb: added
+
+2012-01-09  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r194] Makefile, tools/checkinstall.sh, upkg.cpp, upkg.h: better
+	  build process, passsing in more variables from makefile into c
+	  files
+
+2012-01-07  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r193] Makefile, build, builds, tools/checkinstall.sh:
+	  stramlining build process
+	* [r192] Makefile: version number implemented.
+	* [r191] Makefile: version number implemented.
+	* [r190] Makefile, build/pk_1.1-1_amd64.deb,
+	  build/pk_1.1-1_i686.deb, upkg.cpp: version number implemented.
+	* [r189] Makefile, tools/checkinstall.sh: fixed debian build
+	  process, added 32 bit support
+	* [r188] build/pk_1.1-1_amd64.deb, build/pk_1.1-1_i686.deb: added
+	* [r187] backup: added
+	* [r186] build/pk_1.1-1_amd64.deb, build/pk_1.1-1_i686.deb: added
+	* [r185] build: added
+	* [r184] Makefile, tools/checkinstall.sh: fixed deb generation
+	* [r183] Makefile, doc-pak/INSTALL, options.cpp, tools/todo.sh,
+	  upkg.cpp, upkg.h: code cleanup. fixed build process.
+
+2012-01-05  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r182] Makefile, options.cpp, options.h, upkg.cpp: working
+	  version with symlinked binary.
+
+2012-01-04  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r181] Makefile, tools/todo.sh, upkg.cpp, upkg.h: passing exec
+	  name from makefile into programm via -D
+	* [r180] Makefile, options.cpp, options.h, test/options.cpp,
+	  upkg.cpp, upkg.h: integrated options parser. option parser
+	  resolving absolute path of the executable. Renamed executable
+	  from upkg to pk.
+	  TODO: implement short exec via symlink like pki, kps, pku, etc.
+
+2011-05-08  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r179] options.cpp: disabled debug output
+	* [r178] test/options.cpp: cosmetics
+	* [r177] options.cpp, test/options.cpp: fixed output bug
+
+2011-05-06  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r176] options.cpp: cosmetics
+	* [r175] options.cpp, options.h, test/options.cpp: implemented
+	  datastructure, basic parsing, testing and utility functions
+	  (needs testing.
+
+2011-05-05  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r174] tools/svndiff_gui.sh: simplified
+	* [r173] tools/svndiff_gui.sh: bugfix
+	* [r172] tools/svndiff_gui.sh: fixed broken keyword
+	* [r171] tools/svndiff_gui.sh: added gui diff functionality
+	* [r170] tools/create_file.sh: aded id
+	* [r169] tools/create_file.sh, tools/svndiff_env.sh,
+	  tools/svndiff_gui.sh: added
+	* [r168] tools/sss: removed
+	* [r167] tools/sss: test
+	* [r166] options.cpp, options.h, test/options.cpp: struct now holds
+	  optargs and getopt options
+
+2011-05-04  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r165] options.cpp, options.h, test/options.cpp: output of
+	  options
+
+2011-05-02  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r164] options.cpp, options.h: implemented options struct,
+	  reconsider data types and structure
+
+2011-05-01  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r163] options.cpp: added basic class example
+	* [r162] Makefile, options.cpp, options.h, test/options.cpp: simple
+	  getopt implementation
+	* [r161] test: added options test case
+	* [r160] ., Makefile, options.cpp, options.h, test/options.cpp:
+	  added options test case
+	* [r159] Makefile, tools/cscope_files.sh: added cscope target
+
+2011-04-29  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r158] upkg.cpp, upkg.h: fixed pacman output problem on list
+	* [r157] upkg.cpp: removing newlines in pacman parser
+	* [r156] upkg.cpp: some debugging code for pacman
+	* [r155] upkg.cpp: some debugging code for pacman
+	* [r154] upkg.cpp: skipping empty lines
+
+2011-04-28  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r153] upkg.cpp: remark on renaming the package from upkg to upm
+	  (Unified Package Manager)
+	* [r152] doc-pak/README: documentation update, unfinished and
+	  experimental rpm/yum support
+	* [r151] description-pak, upkg.cpp: documentation update,
+	  unfinished and experimental rpm/yum support
+	* [r150] doc-pak/INSTALL: Documented make targets and building in
+	  general.
+	* [r149] Makefile: target 'doc' returned up to date message and
+	  wouldn't build. maybe reserved target name? renamed doc to docu
+	* [r148] tools/todo.sh: file exclude pattern as variable, using
+	  egrep
+	* [r147] tools/changelog.sh, tools/todo.sh, upkg.h: buildprocess
+	  update:
+	  - line numbers in todo files (usefull hint of thierry girard
+	  - TEST keyword implemented in TODO
+	  - added svn info header to TODO and CHANGELOG
+	* [r146] tools/changelog.sh: added revisions
+
+2011-04-27  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r145] upkg.cpp: cleanup
+	* [r144] upkg.cpp: detected osx error
+	* [r143] Makefile: do not strip for debug2 target
+	* [r141] upkg.cpp: checking for root user on certain operations
+
+2011-04-26  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r140] test: added ignores for binaries
+	* [r139] Makefile: executable for all users after install
+	* [r138] Makefile, upkg.h: updates
+	  - output delimiter now \t
+	  - debug targets work now (-DUPKG_DEBUG=1|2)
+	  - default target (all) without debug output/symbols and static
+	  - dev target points to debug2
+	* [r137] upkg.cpp: Finally fixed problem with output buffering.
+	  Interactive questions can now be answered the same way as on a
+	  terminal (readline).
+	* [r136] Makefile: fix of debug target
+	* [r135] Makefile, upkg.cpp, upkg.h: some tests with unbuffered
+	  output
+
+2011-04-25  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r134] upkg.cpp: doc update
+	* [r133] upkg.cpp: debug information, build with tatget debug2
+	* [r132] test/upkg-unbuffered.cpp: resolved buffering problem with
+	  apt-get nd readline
+	* [r131] Makefile, upkg.cpp, upkg.h: checking for root depending on
+	  operation
+	* [r130] upkg.h: doc update
+	* [r129] test/popen.cpp, upkg.cpp, upkg.h: nearly solved buffering
+	  problem of popen. capturing ok, not stopping to ask for user
+	  input though.
+	* [r128] test/popen.cpp, upkg.cpp: fixed stdin reading problem
+	* [r127] test/popen.cpp: using fgetc() now
+	* [r126] Makefile, test/popen.cpp: popen testcase ready for posting
+	* [r125] test/popen.cpp: added testcase for apt-get install not
+	  returning the last line while using popen
+	* [r124] Makefile, stringlib.cpp, upkg.cpp: fixed compiler warnings
+	* [r123] Makefile: show all warnings at compile time
+	* [r122] Makefile: implemented build via object, target is `dev`
+
+2011-04-22  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r121] doc: added
+	* [r120] test/upkg-unbuffered.cpp, upkg-unbuffered.cpp: moved
+
+2011-04-21  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r119] upkg-unbuffered.cpp: documented problem with possibly
+	  buffering and apt-get called by popen
+	* [r118] upkg.cpp: doc update
+	* [r117] upkg.h: doc update
+	* [r116] upkg.h: doc update
+	* [r115] Makefile: special target for osx
+	* [r114] Makefile: special target for osx
+	* [r113] doc-pak: ignoring TODO, auto generated by tools/todo.sh
+	  while using make all|i686|doc|deb
+	* [r112] tools/test.sh: removed old legacy build system
+	* [r111] Makefile: cleanup
+	* [r110] Makefile, description-pak, tools/changelog.sh,
+	  tools/checkinstall.sh, tools/svndiff.sh, tools/test.sh,
+	  tools/todo.sh, upkg.h: - checkinstall integrated into MAkefile as
+	  target deb (created debian packages)
+	  - todo list generation. will scan for FIXME and TODO, result
+	  stored in doc-pak/TODO
+	  - Updated keywords
+	  - Documentation update
+	* [r109] upkg-unbuffered.cpp: added test case
+	* [r108] Makefile: generating propper changelogs now (up to the
+	  second)
+	* [r107] tools/svndiff.sh: added color diff svn script
+	* [r106] tools/chanelog.sh, tools/changelog.sh: typo in filename
+	* [r105] tools/chanelog.sh: getting latest commits in CHANGELOG due
+	  to using repo url as target
+	* [r104] upkg.cpp: doc update
+	* [r103] upkg.cpp, upkg.h: implemented upgrade method
+
+2011-04-20  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r102] upkg.cpp: documented error wih output handling of
+	  interactive questions
+
+2011-04-19  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r101] upkg.cpp, upkg.h: partial rpm support
+	* [r100] upkg.cpp: better explanation in usage()
+	* [r99] test/cygwin_package_management.txt: added
+	* [r98] Makefile: building static and stripped now
+
+2011-04-18  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r97] Makefile, upkg.cpp: using -static
+	* [r96] Makefile: doc update
+	* [r95] Makefile: no stripping for debug targets
+	* [r94] Makefile: debug flag hard coded
+	* [r93] Makefile: doc update
+	* [r92] Makefile: debug should use static
+	* [r91] Makefile: cleanup
+	* [r90] ., doc-pak, test: ignoring binaries and created files
+	* [r89] .: ignoring binaries and created files
+	* [r88] description-pak: doc update
+	* [r87] Makefile: Removed redundancies, moved dtuff into variables,
+	  added uninstall target
+	* [r86] Makefile: added uninstall
+	* [r85] upkg.cpp: change to revision
+	* [r84] upkg.cpp: Added version option
+	* [r83] test/openbsd_ftp_access.sh, upkg.cpp: Added version option
+	* [r82] test/curlpp-0.7.3.tar.gz: added
+	* [r81] upkg.cpp: doc update
+	* [r80] upkg.h: selfupdate seems the way to go for port sync
+	* [r79] upkg.h: implemented sync
+	* [r78] upkg.cpp, upkg.h: implemented sync
+	* [r77] Makefile: Stripping binaries now (option -s)
+	* [r76] Makefile: Fixed i686 build process, documented missing
+	  library packages
+
+2011-04-17  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r75] tools/build.sh, tools/target.sh: removed old bash based
+	  build system which was replaced by make
+	* [r74] doc-pak/INSTALL: doc update
+	* [r73] doc-pak/README: doc update
+	* [r72] doc-pak/INSTALL, doc-pak/README: doc update
+	* [r71] upkg.cpp, upkg.h: external commands re noew easier
+	  configured in upkg.h. this should make implementing new package
+	  managers simpler.
+	* [r70] Makefile: continue if CHANGLOG file is missing since it is
+	  re generated anyway
+
+2011-04-16  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r69] Makefile: tried to add 32bit support on debian, fail
+	* [r68] Makefile: removing CHANGELOG before regenerating it
+	* [r67] upkg.cpp: documentation update
+	* [r66] Makefile, tools/chanelog.sh: added debug target
+	* [r65] Makefile, test/class.cpp, test/openbsd_ftp_access.sh,
+	  tools/chanelog.sh, tools/checkinstall.sh,
+	  tools/svn2cl-0.13/authors.xml: implemented changelog
+	* [r64] tools/svn2cl-0.13, tools/svn2cl-0.13/ChangeLog,
+	  tools/svn2cl-0.13/NEWS, tools/svn2cl-0.13/README,
+	  tools/svn2cl-0.13/TODO, tools/svn2cl-0.13/authors.xml,
+	  tools/svn2cl-0.13/svn2cl.1, tools/svn2cl-0.13/svn2cl.sh,
+	  tools/svn2cl-0.13/svn2cl.xsl, tools/svn2cl-0.13/svn2html.css,
+	  tools/svn2cl-0.13/svn2html.xsl: added svn2cl
+	* [r63] stringlib.cpp, stringlib.h: documentation
+
+2011-04-15  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r62] test/class.cpp, test/class.h: added test class
+	* [r61] Makefile, test, test/class.cpp, test/class.h: added test
+	  class
+	* [r60] Makefile, stringlib.cpp, stringlib.h, upkg.cpp, upkg.h:
+	  moved general purpose string libraries into a seperate file.
+	  cleanup and documentation
+	* [r59] upkg.cpp: documentation
+	* [r58] upkg.cpp, upkg.h: documentation
+	* [r57] tools/checkinstall.sh: added more meta data
+	* [r56] description-pak, tools/checkinstall.sh: implemented
+	  packaging
+	* [r55] description-pak, doc-pak/description-pak: moved
+	* [r54] doc-pak/description-pak: added description
+	* [r53] INSTALL, Makefile, doc-pak/INSTALL, doc-pak/README:
+	  Documentation directory and basic README
+	* [r52] doc-pak: added
+	* [r50] upkg.cpp, upkg.h: cleanup
+	* [r49] upkg.cpp: cleanup
+	* [r47] upkg.cpp: macports implementation
+	* [r46] upkg.ubuntu_10.10_x86_64: removed
+
+2011-04-14  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r44] Makefile, upkg.cpp: pacman implementation
+	* [r42] tools/build.sh, tools/test.sh: compiling with make
+	* [r41] build.sh, target.sh, test.sh, tools/build.sh,
+	  tools/target.sh, tools/test.sh: moved scripts to tools dir
+	* [r40] tools: added
+
+2011-04-13  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r39] INSTALL, Makefile: added Makefile
+	* [r38] build.sh, test.sh: bugfix in build system
+	* [r36] build.sh, target.sh, test.sh, upkg.ubuntu_10.10_x86_64:
+	  first working version for apt
+	* [r35] upkg.cpp, upkg.ubuntu_10.10_x86_64: cleanup
+	* [r34] upkg.cpp: cleanup
+	* [r33] upkg.cpp, upkg.ubuntu_10.10_x86_64: cleanup
+	* [r32] upkg.cpp: documentation
+	* [r31] build.sh, test.sh, upkg.cpp, upkg.ubuntu_10.10_x86_64:
+	  implemented search parser for apt
+	* [r30] upkg.cpp, upkg.h, upkg.ubuntu_10.10_x86_64: moved
+	  declarations to upkg.h
+	* [r29] upkg.cpp: cleanup
+	* [r28] test.sh, upkg.cpp, upkg.ubuntu_10.10_x86_64: implemented
+	  procedural debian parser
+
+2011-04-12  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r27] upkg.cpp: documentation
+	* [r26] upkg.cpp: documentation
+	* [r25] upkg.cpp, upkg.h, upkg.ubuntu_10.10_x86_64: first parsed
+	  implementation example for apt-cache search
+	* [r24] upkg.cpp: simple parser template example for apt
+	* [r23] test.sh, upkg.cpp, upkg.h, upkg.ubuntu_10.10_x86_64: simple
+	  parser template example for apt
+	* [r22] target.sh, upkg.ubuntu_10.10, upkg.ubuntu_10.10_x86_64:
+	  added architecture name to binary file name
+	* [r21] upkg.cpp, upkg.ubuntu_10.10: Enabled output parser
+	* [r20] upkg.cpp, upkg.ubuntu_10.10: bugfix
+	* [r19] upkg.cpp: cleanup
+	* [r18] upkg.cpp: added UPKG_PATH_SEPERATOR
+
+2011-04-11  Simon Wunderlin <simon@wunderlin.net>
+
+	* [r17] build.sh, upkg.cpp, upkg.ubuntu_10.10: moved files
+	* [r16] pkg.cpp, pkg.h, upkg.cpp, upkg.h: moved files
+	* [r15] build.sh, pkg.cpp, pkg.h: safer symbol names
+	* [r14] test.sh: bugfix with sh syntax
+	* [r13] build.sh, target.sh, test.sh, upkg.ubuntu_10.10: added test
+	  script
+	* [r12] pkg.cpp: documentation
+	* [r11] build.sh, pkg.cpp, pkg.h, upkg.ubuntu_10.10: cleanup
+	* [r10] pkg.cpp, pkg.h: added pkg.h header file
+	* [r9] build.sh, pkg.cpp: example of output parsing with peopen
+	* [r8] upkg.ubuntu_10.10: added help option
+	* [r7] build.sh, pkg.cpp, upkg.debian: added help option
+	* [r6] build.sh, upkg, upkg.debian: target specific executable
+	  names
+	* [r5] pkg.cpp, upkg: first working version on debian. using vector
+	  for additional arguments. generation of command line string.
+	  executing using system()
+	* [r4] build.sh: properties
+	* [r3] build.sh, pkg.cpp: properties
+	* [r2] build.sh, pkg.cpp, upkg: added
+	* [r1] .: added
+

@@ -1,0 +1,10 @@
+./upkg.cpp
+./stringlib.cpp
+./test/class.cpp
+./test/popen.cpp
+./test/class.h
+./test/options.cpp
+./options.h
+./upkg.h
+./options.cpp
+./stringlib.h

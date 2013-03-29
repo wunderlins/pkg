@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<authors xmlns:html="http://www.w3.org/1999/xhtml">
+ <author uid="wundelrins">
+  Simon Wunderlin &lt;<html:a href="mailto:simon@wunderlin.net">simon@wunderlin.net</html:a>&gt;
+ </author>
+ <author uid="wus">
+  Simon Wunderlin &lt;<html:a href="mailto:simon@wunderlin.net">simon@wunderlin.net</html:a>&gt;
+ </author>
+ <author uid="spliffy">
+  Simon Wunderlin &lt;<html:a href="mailto:simon@wunderlin.net">simon@wunderlin.net</html:a>&gt;
+ </author>
+ <author uid="nobody">
+  Who's this &lt;nobody@example.com&gt;
+ </author>
+ <author uid="root">
+  Superman &lt;root@localhost&gt;
+ </author>
+</authors>
