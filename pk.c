@@ -14,6 +14,8 @@
  */
 
 #include <stdio.h>
+#include <string.h>
+#include <libgen.h> // probably bsd only for `basename`
 #include "pk.h"
 #include "openbsd5.h"
 
@@ -25,6 +27,13 @@
 int main(int argc, char **argv, char **envp) {
 	
 	// check action (index 2 in executable name)
+	char mode = '\0';
+	char *arg0 = basename(argv[0]);
+	if (strlen(arg0) != 3) {
+		printf("Wrong program name '%s' (%lu).\n", arg0, strlen(arg0));
+		return 1;
+	}
+	mode = arg0[2];
 	
 	// execute action as systemcall according to configuration
 	FILE *fp;
