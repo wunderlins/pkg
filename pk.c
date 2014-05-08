@@ -56,6 +56,8 @@ int main(int argc, char **argv, char **envp) {
 	
 	printf("%d\n", mode);
 	
+	// TODO: buffer remaining command line arguments and parameters
+	
 	// execute action as systemcall according to configuration
 	FILE *fp;
 	char *cmd = "read a; echo $a";
@@ -71,7 +73,7 @@ int main(int argc, char **argv, char **envp) {
 		pclose(fp);
 	}
 
-	// return exitcode of the system call
+	// TODO: return exitcode of the system call
 	
 	return 0;
 }
