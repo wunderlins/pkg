@@ -77,7 +77,7 @@ C_I=""
 
 if [[ "$G_SYSTEM" == "OpenBSD" ]]; then
 	
-	function openbsd_update {
+	function openbsd_update_list {
 		for p in `pkg_info | sed -e 's/-[0-9\.]*.*$//'`; do 
 			sudo pkg_add -v -s -u $p | grep -v '(ok)' 
 		done
@@ -97,7 +97,7 @@ if [[ "$G_SYSTEM" == "OpenBSD" ]]; then
 	
 	C_M=''
 	C_C='openbsd_update'
-	C_U='openbsd_update'
+	C_U='openbsd_update_list'
 	C_L='openbsd_list'
 	C_S='openbsd_search'   # param $1 is search term
 	C_I='sudo pkg_add'     # param $1 is package name
