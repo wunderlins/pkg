@@ -61,7 +61,7 @@ int main(int argc, char **argv, char **envp) {
 		case 'i': mode = INSTALL;    break;
 	}
 	
-	printf("%d\n", mode);
+	//printf("%d\n", mode);
 	
 	// TODO: buffer remaining command line arguments and parameters
 	char *params = "";
@@ -82,13 +82,18 @@ int main(int argc, char **argv, char **envp) {
 		//printf("--> %d, %s\n", (int) strlen(argv[i]), argv[i]);
 	}
 	
-	//printf("params '%s'\n", params);
+	//printf("params %lu '%s'\n", strlen(params), params);
 	// execute action as systemcall according to configuration
-	printf("%s\n", commands[mode]);
+	//printf("%s\n", commands[mode]);
 	FILE *fp;
 	//char *cmd = commands[mode];
 	char buffer[64];
-	fp = popen(commands[mode], "r");
+	//printf("l: %lu\n", strlen(commands[mode]) + strlen(params) + 1);
+	char cmd[strlen(commands[mode]) + strlen(params) + 1];
+	strcpy(cmd, commands[mode]);
+	strcat(cmd, params);
+	printf("cmd: %s\n", cmd);
+	fp = popen(cmd, "r");
 	if (fp == NULL) {
 		printf("Failed\n");
 	} else {

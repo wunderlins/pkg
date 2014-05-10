@@ -1,7 +1,7 @@
 #ifndef _PK_H_
 #define _PK_H_
 
-#define PK_MODES_LENGTH 6
+#define PK_MODES_LENGTH 7
 
 typedef enum {
 	/* 0 */ NONE, 
