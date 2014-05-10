@@ -17,13 +17,41 @@
 #include <string.h>
 #include <libgen.h> // probably bsd only for `basename`
 #include <stdlib.h> // used for realloc
-#include "pk.h"
+
+#define PK_MODES_LENGTH 7
+typedef enum {
+	/* 0 */ NONE, 
+	/* 1 */ META, 
+	/* 2 */ UPDATEABLE, 
+	/* 3 */ UPDATE, 
+	/* 4 */ LIST, 
+	/* 5 */ SEARCH, 
+	/* 6 */ INSTALL
+} modes_t;
+
 #ifdef OpenBSD
-	#include "openbsd5.h"
+const char *commands[PK_MODES_LENGTH] = {
+	/* 0 */ "true",
+	/* 1 */ "", // pkm - update metadata
+	/* 2 */ "", // pkc - list available updates
+	/* 3 */ "pkg_add -uUvi", // pku - update all packages
+	/* 4 */ "pkg_info", // pkl - list all installed packages
+	/* 5 */ "pkg_info -Q", // pks - search for package \$1
+	/* 6 */ "pkg_add"  // pki - install package with name \$1
+};
 #endif
 
 #ifdef Debian
-	#include "debian.h"
+const char *commands[PK_MODES_LENGTH] = {
+	/* 0 */ "true",
+	/* 1 */ "apt-get update", // pkm - update metadata
+	/* 2 */ "apt-get -Vs upgrade | perl -ne 'print if /upgraded:/ .. /upgraded,/'", 
+	        // pkc - list available updates
+	/* 3 */ "apt-get upgrade", // pku - update all packages
+	/* 4 */ "dpkg -l", // pkl - list all installed packages
+	/* 5 */ "apt-cache search", // pks - search for package \$1
+	/* 6 */ "apt-get install"  // pki - install package with name \$1
+};
 #endif
 
 /**
@@ -44,21 +72,14 @@ int main(int argc, char **argv, char **envp) {
 	char mode_c = '\0';
 	mode_c = arg0[2];
 	modes_t mode = NONE;
-	/*
-			pkm - update metadata
-			pkc - list available updates
-			pku - update all packages
-			pkl - list all installed packages
-			pks - search for package \$1
-			pki - install package with name \$1
-	*/
+	
 	switch(mode_c) {
-		case 'm': mode = META;       break;
-		case 'c': mode = UPDATEABLE; break;
-		case 'u': mode = UPDATE;     break;
-		case 'l': mode = LIST;       break;
-		case 's': mode = SEARCH;     break;
-		case 'i': mode = INSTALL;    break;
+		case 'm': mode = META;       break; // pkm - update metadata
+		case 'c': mode = UPDATEABLE; break; // pkc - list available updates
+		case 'u': mode = UPDATE;     break; // pku - update all packages
+		case 'l': mode = LIST;       break; // pkl - list all installed packages
+		case 's': mode = SEARCH;     break; // pks - search for package \$1
+		case 'i': mode = INSTALL;    break; // pki - install package with name \$1
 	}
 	
 	//printf("%d\n", mode);
