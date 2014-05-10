@@ -31,7 +31,7 @@ typedef enum {
 
 #ifdef OpenBSD
 const char *commands[PK_MODES_LENGTH] = {
-	/* 0 */ "true",
+	/* 0 */ "echo 'Not implemented'",
 	/* 1 */ "", // pkm - update metadata
 	/* 2 */ "", // pkc - list available updates
 	/* 3 */ "pkg_add -uUvi", // pku - update all packages
@@ -43,7 +43,7 @@ const char *commands[PK_MODES_LENGTH] = {
 
 #ifdef Debian
 const char *commands[PK_MODES_LENGTH] = {
-	/* 0 */ "true",
+	/* 0 */ "echo 'Not implemented'",
 	/* 1 */ "apt-get update", // pkm - update metadata
 	/* 2 */ "apt-get -Vs upgrade | perl -ne 'print if /upgraded:/ .. /upgraded,/'", 
 	        // pkc - list available updates

@@ -3,13 +3,17 @@
 CC      = gcc
 CCFLAGS = -Wall
 RM      = rm
-os = $(shell uname -o)
+#	os      = $(shell uname -o 2>/dev/null || echo 0)
 
-ifeq ($(os), GNU/Linux)
+#CCFLAGS += -D OpenBSD
+#CCFLAGS += -D Debian
+
+ifeq ($(OS),GNU/Linux)
 	CCFLAGS += -D Debian
-else ifeq ($(OS), OpenBSD)
+else 
 	CCFLAGS += -D OpenBSD
 endif
+
 
 all:
 	$(CC) $(CCFLAGS) -o pk pk.c
