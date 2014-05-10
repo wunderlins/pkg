@@ -1,2 +1,0 @@
-Interesting commandline options:
-http://serverfault.com/questions/83456/cygwin-package-management
