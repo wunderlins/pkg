@@ -5,7 +5,7 @@
  * search/list for different unix operating systems.
  *
  * Goals:
- * - unified command set
+ * - unified command set, DONE
  * - portable
  * - small
  * - eventually add unified output for responses
@@ -82,9 +82,7 @@ int main(int argc, char **argv, char **envp) {
 		case 'i': mode = INSTALL;    break; // pki - install package with name \$1
 	}
 	
-	//printf("%d\n", mode);
-	
-	// TODO: buffer remaining command line arguments and parameters
+	// buffer remaining command line arguments and parameters
 	char *params = "";
 	int i, len = 0;
 	for (i=1; i<argc; i++) {
@@ -99,21 +97,18 @@ int main(int argc, char **argv, char **envp) {
 		strcat(tmp, argv[i]);
 		
 		params = tmp;
-		
-		//printf("--> %d, %s\n", (int) strlen(argv[i]), argv[i]);
 	}
 	
-	//printf("params %lu '%s'\n", strlen(params), params);
-	// execute action as systemcall according to configuration
-	//printf("%s\n", commands[mode]);
+	// run the command
+	int rc = -1;
 	FILE *fp;
-	//char *cmd = commands[mode];
 	char buffer[3];
-	//printf("l: %lu\n", strlen(commands[mode]) + strlen(params) + 1);
 	char cmd[strlen(commands[mode]) + strlen(params) + 1];
 	strcpy(cmd, commands[mode]);
 	strcat(cmd, params);
-	printf("cmd: %s\n", cmd);
+	//printf("cmd: %s\n", cmd);
+	
+	fflush(stdout); // OpenBSD pclose manual under BUGS
 	fp = popen(cmd, "r");
 	if (fp == NULL) {
 		printf("Failed\n");
@@ -123,10 +118,11 @@ int main(int argc, char **argv, char **envp) {
 			printf("%s", buffer);
 			fflush(stdout);
 		}
-		pclose(fp);
+		rc = pclose(fp);
+		//printf("%d\n", rc);
 	}
 
-	// TODO: return exitcode of the system call
-	
-	return 0;
+	// return exitcode of the system call
+	if (rc > 255) rc = 255;
+	return rc;
 }
