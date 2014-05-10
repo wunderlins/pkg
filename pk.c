@@ -87,7 +87,7 @@ int main(int argc, char **argv, char **envp) {
 	//printf("%s\n", commands[mode]);
 	FILE *fp;
 	//char *cmd = commands[mode];
-	char buffer[64];
+	char buffer[3];
 	//printf("l: %lu\n", strlen(commands[mode]) + strlen(params) + 1);
 	char cmd[strlen(commands[mode]) + strlen(params) + 1];
 	strcpy(cmd, commands[mode]);
@@ -100,6 +100,7 @@ int main(int argc, char **argv, char **envp) {
 		size_t len = sizeof(buffer)-1;
 		while (fgets(buffer, len, fp) != NULL) {
 			printf("%s", buffer);
+			fflush(stdout);
 		}
 		pclose(fp);
 	}
