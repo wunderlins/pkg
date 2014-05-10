@@ -57,12 +57,26 @@ int main(int argc, char **argv, char **envp) {
 	printf("%d\n", mode);
 	
 	// TODO: buffer remaining command line arguments and parameters
+	int i, len = 0;
+	for (i=1; i<argc; i++) {
+		len = len + sizeof(argv[i]) + sizeof(" ");
+		printf("--> %d, %s\n", (int) strlen(argv[i]), argv[i]);
+	}
 	
+	printf("len %d\n", len);
+	char params[sizeof(char) * (len+1)];
+	for (i=1; i<argc; i++) {
+		strlcat(params, argv[i], sizeof(argv[i]));
+		strlcat(params, " ", sizeof(' '));
+	}
+	
+	printf("params '%s'\n", params);
 	// execute action as systemcall according to configuration
+	printf("%s\n", commands[mode]);
 	FILE *fp;
-	char *cmd = "read a; echo $a";
+	//char *cmd = commands[mode];
 	char buffer[64];
-	fp = popen(cmd, "r");
+	fp = popen(commands[mode], "r");
 	if (fp == NULL) {
 		printf("Failed\n");
 	} else {
