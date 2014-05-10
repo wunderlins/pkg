@@ -16,8 +16,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <libgen.h> // probably bsd only for `basename`
+#include <stdlib.h> // used for realloc
 #include "pk.h"
-#include "openbsd5.h"
+#ifdef OpenBSD
+	#include "openbsd5.h"
+#endif
+
+#ifdef Debian
+	#include "debian.h"
+#endif
 
 /**
  * main function
@@ -57,20 +64,25 @@ int main(int argc, char **argv, char **envp) {
 	printf("%d\n", mode);
 	
 	// TODO: buffer remaining command line arguments and parameters
+	char *params = "";
 	int i, len = 0;
 	for (i=1; i<argc; i++) {
 		len = len + sizeof(argv[i]) + sizeof(" ");
-		printf("--> %d, %s\n", (int) strlen(argv[i]), argv[i]);
+		char *tmp;
+		if ((tmp = malloc(sizeof(params) + len + 1)) == NULL) {
+			printf("Failed to allocate memmory.\n");
+			return 2;
+		}
+		strcpy(tmp, params);
+		strcat(tmp, " ");
+		strcat(tmp, argv[i]);
+		
+		params = tmp;
+		
+		//printf("--> %d, %s\n", (int) strlen(argv[i]), argv[i]);
 	}
 	
-	printf("len %d\n", len);
-	char params[sizeof(char) * (len+1)];
-	for (i=1; i<argc; i++) {
-		strlcat(params, argv[i], sizeof(argv[i]));
-		strlcat(params, " ", sizeof(' '));
-	}
-	
-	printf("params '%s'\n", params);
+	//printf("params '%s'\n", params);
 	// execute action as systemcall according to configuration
 	printf("%s\n", commands[mode]);
 	FILE *fp;
