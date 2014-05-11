@@ -1,56 +1,58 @@
 2014-05-10  wus  <swunderlin@gmail.com>
 
-	renamed
+	[5a56489] added changelog
 
-	cleanup, implemented proper exit codes
+	[c791ad3] renamed
 
-	fixing OS detection
+	[c296d26] cleanup, implemented proper exit codes
 
-	requiring gmake for all systems, too much hassle to have a portable build system with different make or autoconf tools for now
+	[b2433f3] fixing OS detection
+
+	[9b0f630] requiring gmake for all systems, too much hassle to have a portable build system with different make or autoconf tools for now
 
 2014-05-10  Simon Wunderlin  <simon.wunderlin@usb.ch>
 
-	added creation of symlinks in makefile again
+	[bee7cf9] added creation of symlinks in makefile again
 
-	cleanup, got rid of external files. only pk.c needs to be compiled
+	[fbd6cf7] cleanup, got rid of external files. only pk.c needs to be compiled
 
-	removed uneeded files
+	[279b175] removed uneeded files
 
-	cleanup, moved old stuff to the old folder
+	[b4a9ce3] cleanup, moved old stuff to the old folder
 
-	solved issue with output buffering of popen results
+	[59524b4] solved issue with output buffering of popen results
 
-	first working debian mplementation
+	[e12d0b6] first working debian mplementation
 
-	cleanup
+	[0d47139] cleanup
 
-	introducing debian support
+	[3d189f6] introducing debian support
 
 2014-05-10  wus  <swunderlin@gmail.com>
 
-	started parameter parsing implementation
+	[9b3b831] started parameter parsing implementation
 
 2014-05-08  wus  <swunderlin@gmail.com>
 
-	added TODO
+	[4033f99] added TODO
 
-	modes index
+	[4df4b97] modes index
 
-	fixed bug with double delcation of the udate function
+	[ae19cf2] fixed bug with double delcation of the udate function
 
-	parameter checking
+	[bf43bac] parameter checking
 
-	added openbsd5 files, added popen implementation
+	[6ddd582] added openbsd5 files, added popen implementation
 
 2014-05-08  wus  <wus@openbsd55.intra.wunderlin.net>
 
-	initial setup
+	[3a97980] initial setup
 
-	cleanup
+	[9079bec] cleanup
 
 2013-03-29  wus  <swunderlin@gmail.com>
 
-	first commit
+	[dcbd05a] first commit
 
 
 
