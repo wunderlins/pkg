@@ -27,5 +27,12 @@ all:
 	[ ! -h pki ] && ln -s pk pki || true
 
 clean:
-	$(RM) pk || true
-	$(RM) pk{c,h,i,l,p,r,s,u} || true
+	$(RM) pk  || true
+	$(RM) pkm || true
+	$(RM) pkc || true
+	$(RM) pku || true
+	$(RM) pkl || true
+	$(RM) pks || true
+	$(RM) pki || true
+	$(RM) *~
+
