@@ -30,7 +30,7 @@ typedef enum {
 	/* 6 */ INSTALL
 } modes_t;
 
-int buffer_length = 3;
+int buffer_length = 254;
 char output_line[2048] = "";
 char mode_c = '\0';
 modes_t mode = NONE;
@@ -81,12 +81,12 @@ int process_line(char *line) {
 		case LIST:
 		case INSTALL:
 		default:
-			printf("%s\n", line, mode);
+			printf("%s\n", line);
 			break;
 
 		case SEARCH:
 			//printf("Mode: SEARCH\n");
-			printf("%s\n", line, mode);
+			printf("%s\n", line);
 			break;
 	}
 	
@@ -96,21 +96,51 @@ int process_line(char *line) {
 }
 #endif
 
+int append(char *str, char c, int index) {
+	str[index] = c;
+	str[index+1] = '\0';
+	return 0;
+}
+
 int parse_output(char *buffer) {
+	
+	// printf("°[%d] %s", strlen(buffer), buffer);
+	// return 1;
 	
 	// loop trough buffer and find newline characters
 	int i = 0;
 	for(i=0; i<buffer_length; i++) {
+		if (buffer[i] == '\0') {
+			output_line[0] = '\0';
+			return 0;
+		}
+		
+		if (buffer[i] == '\n') {
+			printf("%s", output_line);
+			output_line[0] = '\0';
+			
+			//printf("%c", buffer[i]);
+		}
+		
+		//strcat(output_line, buffer[i]);
+		//output_line[i] = buffer[i];
+		// output_line[i+1] = '\0';
+		append(output_line, buffer[i], i);
+		continue;
+		
 		// terminate at the endo of a c string
 		if (buffer[i] == '\0') {
-			// printf("[%d] %s\n", i, "End of String");
+			//strcat(output_line, &(buffer[i]));
+			//printf("+[%d] %s %s\n", i, output_line, "End of String");
+			//process_line(output_line);
+			output_line[0] = '\0';
 			break;
 		}
 		
 		// process line if we have found a newline character
 		if (buffer[i] == '\n') {
-			//printf("\n[%d] %s", i, "Newline");
-			process_line(output_line);
+			//printf("-[%d] %s %s\n", i, output_line, "Newline");
+			//process_line(output_line);
 			output_line[0] = '\0';
 			break;
 		}
@@ -185,6 +215,7 @@ int main(int argc, char **argv, char **envp) {
 		while (fgets(buffer, len, fp) != NULL) {
 			
 			// TODO: parse output
+			//printf("%s", buffer); return 1;
 			parse_output(buffer);
 		}
 		rc = pclose(fp);
