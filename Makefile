@@ -36,3 +36,8 @@ clean:
 	$(RM) pki || true
 	$(RM) *~
 
+diff:
+	git diff | colordiff | less -R
+
+test_pks:
+	./pks vim

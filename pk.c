@@ -19,6 +19,7 @@
 #include <stdlib.h> // used for realloc
 
 #define PK_MODES_LENGTH 7
+
 typedef enum {
 	/* 0 */ NONE, 
 	/* 1 */ META, 
@@ -28,6 +29,11 @@ typedef enum {
 	/* 5 */ SEARCH, 
 	/* 6 */ INSTALL
 } modes_t;
+
+int buffer_length = 3;
+char output_line[2048] = "";
+char mode_c = '\0';
+modes_t mode = NONE;
 
 #ifdef OpenBSD
 const char *commands[PK_MODES_LENGTH] = {
@@ -39,6 +45,12 @@ const char *commands[PK_MODES_LENGTH] = {
 	/* 5 */ "pkg_info -Q", // pks - search for package \$1
 	/* 6 */ "pkg_add"  // pki - install package with name \$1
 };
+
+int process_line(char *line) {
+	printf("%s\n", line);
+	fflush(stdout);
+	return 0;
+}
 #endif
 
 #ifdef Debian
@@ -52,7 +64,59 @@ const char *commands[PK_MODES_LENGTH] = {
 	/* 5 */ "apt-cache search", // pks - search for package \$1
 	/* 6 */ "apt-get install"  // pki - install package with name \$1
 };
+
+int process_line(char *line) {
+		
+	switch(mode) {
+		case NONE:
+		case META:
+		case UPDATEABLE:
+		case UPDATE:
+		case LIST:
+		case INSTALL:
+		default:
+			printf("%s [%d]\n", line, mode);
+			break;
+
+		case SEARCH:
+			//printf("Mode: SEARCH\n");
+			printf("%s [%d]\n", line, mode);
+			break;
+	}
+	
+	//printf("%s [%d]\n", line, mode);
+	fflush(stdout);
+	return 0;
+}
 #endif
+
+int parse_output(char *buffer) {
+	
+	// loop trough buffer and find newline characters
+	int i = 0;
+	for(i=0; i<buffer_length; i++) {
+		// terminate at the endo of a c string
+		if (buffer[i] == '\0') {
+			// printf("[%d] %s\n", i, "End of String");
+			break;
+		}
+		
+		// process line if we have found a newline character
+		if (buffer[i] == '\n') {
+			//printf("\n[%d] %s", i, "Newline");
+			process_line(output_line);
+			output_line[0] = '\0';
+			break;
+		}
+		
+		strcat(output_line, &(buffer[i]));
+	}
+	
+	//printf("%s", buffer);
+	//fflush(stdout);
+	
+	return 0;
+}
 
 /**
  * main function
@@ -69,9 +133,7 @@ int main(int argc, char **argv, char **envp) {
 		return 1;
 	}
 	
-	char mode_c = '\0';
 	mode_c = arg0[2];
-	modes_t mode = NONE;
 	
 	switch(mode_c) {
 		case 'm': mode = META;       break; // pkm - update metadata
@@ -102,7 +164,7 @@ int main(int argc, char **argv, char **envp) {
 	// run the command
 	int rc = -1;
 	FILE *fp;
-	char buffer[3];
+	char buffer[buffer_length];
 	char cmd[strlen(commands[mode]) + strlen(params) + 1];
 	strcpy(cmd, commands[mode]);
 	strcat(cmd, params);
@@ -115,8 +177,9 @@ int main(int argc, char **argv, char **envp) {
 	} else {
 		size_t len = sizeof(buffer)-1;
 		while (fgets(buffer, len, fp) != NULL) {
-			printf("%s", buffer);
-			fflush(stdout);
+			
+			// TODO: parse output
+			parse_output(buffer);
 		}
 		rc = pclose(fp);
 		//printf("%d\n", rc);
