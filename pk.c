@@ -35,6 +35,12 @@ char output_line[2048] = "";
 char mode_c = '\0';
 modes_t mode = NONE;
 
+/**
+ * Function declarations
+ */
+int parse_output(char *);
+int process_line(char *);
+
 #ifdef OpenBSD
 const char *commands[PK_MODES_LENGTH] = {
 	/* 0 */ "echo 'Not implemented'",
@@ -75,12 +81,12 @@ int process_line(char *line) {
 		case LIST:
 		case INSTALL:
 		default:
-			printf("%s [%d]\n", line, mode);
+			printf("%s\n", line, mode);
 			break;
 
 		case SEARCH:
 			//printf("Mode: SEARCH\n");
-			printf("%s [%d]\n", line, mode);
+			printf("%s\n", line, mode);
 			break;
 	}
 	
