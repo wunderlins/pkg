@@ -178,6 +178,7 @@ int main(int argc, char **argv, char **envp) {
 		case 'l': mode = LIST;       break; // pkl - list all installed packages
 		case 's': mode = SEARCH;     break; // pks - search for package \$1
 		case 'i': mode = INSTALL;    break; // pki - install package with name \$1
+		// FIXME: catch unknown modes
 	}
 	
 	// buffer remaining command line arguments and parameters
