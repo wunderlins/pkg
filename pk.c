@@ -116,7 +116,7 @@ int parse_output(char *buffer) {
 		}
 		
 		if (buffer[i] == '\n') {
-			printf("%s", output_line);
+			printf("%s\n", output_line);
 			output_line[0] = '\0';
 			
 			//printf("%c", buffer[i]);
