@@ -18,6 +18,15 @@
 #include <libgen.h> // probably bsd only for `basename`
 #include <stdlib.h> // used for realloc
 
+#define STRINGIFY(x) #x
+#define TOSTRING(x) STRINGIFY(x)
+
+#ifdef VERSION
+	#define VERSION_STR TOSTRING(VERSION)
+#else
+	#define VERSION_STR "0"
+#endif
+
 #define PK_MODES_LENGTH 7
 
 typedef enum {
@@ -34,6 +43,15 @@ int buffer_length = 254;
 char output_line[2048] = "";
 char mode_c = '\0';
 modes_t mode = NONE;
+uint8_t expect_param[] = {
+	/* 0 NONE */        0,
+	/* 1 META */        0,
+	/* 2 UPDATEABLE */  0,
+	/* 3 UPDATE */      0,
+	/* 4 LIST */        0,
+	/* 5 SEARCH */      1,
+	/* 6 INSTALL */     1
+};
 
 /**
  * Function declarations
@@ -50,6 +68,24 @@ const char *commands[PK_MODES_LENGTH] = {
 	/* 4 */ "pkg_info", // pkl - list all installed packages
 	/* 5 */ "pkg_info -Q", // pks - search for package \$1
 	/* 6 */ "pkg_add"  // pki - install package with name \$1
+};
+
+int process_line(char *line) {
+	printf("%s\n", line);
+	fflush(stdout);
+	return 0;
+}
+#endif
+
+#ifdef Darwin
+const char *commands[PK_MODES_LENGTH] = {
+	/* 0 */ "echo 'Not implemented'",
+	/* 1 */ "port selfupdate", // pkm - update metadata
+	/* 2 */ "port outdated", // pkc - list available updates
+	/* 3 */ "port upgrade outdated", // pku - update all packages
+	/* 4 */ "port list", // pkl - list all installed packages
+	/* 5 */ "port list", // pks - search for package \$1
+	/* 6 */ "port install"  // pki - install package with name \$1
 };
 
 int process_line(char *line) {
@@ -155,6 +191,26 @@ int parse_output(char *buffer) {
 }
 
 /**
+ * Usage information
+ */
+void usage() {
+	//char *msg =
+	
+	printf("Platform independent package manager.\n\n"
+				 "Usage: pks [name] # search package\n"
+				 "       pki [name] # install package\n"
+				 "       pkl        # list all installed packages\n"
+				 "       pku        # update all packages\n"
+				 "       pkc        # list available updates\n"
+				 "       pkm        # update metadata\n"
+				 "\n"
+				 "Version: %s\n"
+				 "\n", VERSION_STR);
+	return;
+}
+
+
+/**
  * main function
  *
  * include env variables (envp), should work on POSIX and W32+
@@ -165,7 +221,8 @@ int main(int argc, char **argv, char **envp) {
 	char *arg0 = basename(argv[0]);
 	//printf("%d\n", (int) strlen(arg0));
 	if (strlen(arg0) != 3) {
-		printf("Wrong program name '%s' (%lu).\n", arg0, strlen(arg0));
+		printf("Wrong program name '%s' (%lu).\n\n", arg0, strlen(arg0));
+		usage();
 		return 1;
 	}
 	
@@ -205,7 +262,7 @@ int main(int argc, char **argv, char **envp) {
 	char cmd[strlen(commands[mode]) + strlen(params) + 1];
 	strcpy(cmd, commands[mode]);
 	strcat(cmd, params);
-	//printf("cmd: %s\n", cmd);
+	printf("cmd: %s\n", cmd);
 	
 	fflush(stdout); // OpenBSD pclose manual under BUGS
 	fp = popen(cmd, "r");

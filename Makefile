@@ -1,5 +1,6 @@
 # GOAL: compile only platform specific functionality to keep it small
 
+VERSION = "0.2"
 CC      = gcc
 CCFLAGS = -Wall
 RM      = rm
@@ -8,16 +9,20 @@ RM      = rm
 #CCFLAGS += -D OpenBSD
 #CCFLAGS += -D Debian
 
-ifeq ($(shell uname -o),GNU/Linux)
-	OS = Debian
-else 
-	OS = OpenBSD
+ifeq ($(shell uname),Darwin)
+		OS = Darwin
+else
+	ifeq ($(shell uname -o),GNU/Linux)
+		OS = Debian
+	else
+		OS = OpenBSD
+	endif
 endif
 
-CCFLAGS += -D $(OS)
+CCFLAGS += -D $(OS) -D VERSION=$(VERSION)
 
 all:
-	@echo $(OS)
+	@echo "Target OS: " $(OS)
 	$(CC) $(CCFLAGS) -o pk pk.c
 	[ ! -h pkm ] && ln -s pk pkm || true
 	[ ! -h pkc ] && ln -s pk pkc || true
