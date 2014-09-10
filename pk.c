@@ -43,6 +43,8 @@ int buffer_length = 254;
 char output_line[2048] = "";
 char mode_c = '\0';
 modes_t mode = NONE;
+
+// parameters expected
 uint8_t expect_param[] = {
 	/* 0 NONE */        0,
 	/* 1 META */        0,
@@ -50,6 +52,17 @@ uint8_t expect_param[] = {
 	/* 3 UPDATE */      0,
 	/* 4 LIST */        0,
 	/* 5 SEARCH */      1,
+	/* 6 INSTALL */     1
+};
+
+// requires root
+uint8_t requires_root[] = {
+	/* 0 NONE */        0,
+	/* 1 META */        1,
+	/* 2 UPDATEABLE */  0,
+	/* 3 UPDATE */      1,
+	/* 4 LIST */        0,
+	/* 5 SEARCH */      0,
 	/* 6 INSTALL */     1
 };
 
@@ -219,6 +232,7 @@ int main(int argc, char **argv, char **envp) {
 	
 	// check action (index 2 in executable name)
 	char *arg0 = basename(argv[0]);
+	
 	//printf("%d\n", (int) strlen(arg0));
 	if (strlen(arg0) != 3) {
 		printf("Wrong program name '%s' (%lu).\n\n", arg0, strlen(arg0));
@@ -254,6 +268,22 @@ int main(int argc, char **argv, char **envp) {
 		
 		params = tmp;
 	}
+	
+	// check parameter count
+	if (expect_param[mode] != i-1) {
+		//printf("num of parameters: %d, expected: %d, mode: %d\n", i-1, expect_param[mode], mode);
+		usage();
+		return 3;
+	}
+	
+	// check if we need super user rights
+	// TODO: implement
+	/*
+	if (requires_root[mode]) {
+		
+		return 4;
+	}
+	*/
 	
 	// run the command
 	int rc = -1;
