@@ -1,5 +1,7 @@
 # GOAL: compile only platform specific functionality to keep it small
 
+.PHONY: changelog
+
 VERSION = "0.2"
 CC      = gcc
 CCFLAGS = -Wall
@@ -46,3 +48,7 @@ diff:
 
 test_pks:
 	./pks vim
+	
+changelog:
+	./tools/gitlog-to-changelog > doc/Changelog
+	cat doc/Changelog.svn >> doc/Changelog

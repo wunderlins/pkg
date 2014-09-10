@@ -1,3 +1,5 @@
+WARNING Outdated documentation
+
 INSTALLATION
 
 You need a C++ compiler (for example g++) and make (eg. cmake). This programm is intended to be used on systems with gnu or bsd userland tools. However, bsd support is largely untested for now.
@@ -18,7 +20,4 @@ For additional targets check the Makefile, notable targets:
 	              works only on subversion checkouts.
 	deb           create debian package with checkinstall
 	clean         cleanup after compilation, removes generated files
-	
-
-$Id: INSTALL 183 2012-01-07 20:28:35Z wus $
 
