@@ -221,8 +221,14 @@ void usage() {
 				 "       pkm        # update metadata\n"
 				 "\n"
 				 "ENVIRONMENT VARIABLES\n"
-				 "USE_SUDO: if set, sudo is automatically used for commands which usually \n"
-				 "          need to be run by root.\n"
+				 "  USE_SUDO: if set, sudo is automatically used for commands which usually \n"
+				 "            need to be run by root.\n"
+				 "\n"
+				 "EXIT CODES\n"
+				 "  1: Wrong executable name\n"
+				 "  2: Failed to allocate memmory\n"
+				 "  3: Missing parameter\n"
+				 "  4: Unknown mode\n"
 				 "\n"
 				 "Version: %s\n"
 				 "\n", VERSION_STR);
@@ -270,7 +276,7 @@ int main(int argc, char **argv, char **envp) {
 		case 'l': mode = LIST;       break; // pkl - list all installed packages
 		case 's': mode = SEARCH;     break; // pks - search for package \$1
 		case 'i': mode = INSTALL;    break; // pki - install package with name \$1
-		// FIXME: catch unknown modes
+		default: usage(); return 4;         // catch unknown modes
 	}
 	
 	// buffer remaining command line arguments and parameters
