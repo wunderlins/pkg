@@ -71,6 +71,9 @@ uint8_t requires_root[] = {
  */
 int parse_output(char *);
 int process_line(char *);
+int append(char *, char, int);
+int parse_output(char *);
+void usage();
 
 #ifdef OpenBSD
 const char *commands[PK_MODES_LENGTH] = {
@@ -217,6 +220,10 @@ void usage() {
 				 "       pkc        # list available updates\n"
 				 "       pkm        # update metadata\n"
 				 "\n"
+				 "ENVIRONMENT VARIABLES\n"
+				 "USE_SUDO: if set, sudo is automatically used for commands which usually \n"
+				 "          need to be run by root.\n"
+				 "\n"
 				 "Version: %s\n"
 				 "\n", VERSION_STR);
 	return;
@@ -229,6 +236,20 @@ void usage() {
  * include env variables (envp), should work on POSIX and W32+
  */
 int main(int argc, char **argv, char **envp) {
+	
+	char* cuse_sudo = getenv("USE_SUDO");
+	int use_sudo = 0;
+	if (cuse_sudo != NULL) {
+		//printf("env: %s\n", use_sudo);
+		use_sudo = atoi(&cuse_sudo[0]);
+		
+		/*
+		if (use_sudo == 1) {
+			;
+		}
+		*/
+	}
+	//printf("Automatically using sudo: %d\n", use_sudo);
 	
 	// check action (index 2 in executable name)
 	char *arg0 = basename(argv[0]);
@@ -289,8 +310,18 @@ int main(int argc, char **argv, char **envp) {
 	int rc = -1;
 	FILE *fp;
 	char buffer[buffer_length];
-	char cmd[strlen(commands[mode]) + strlen(params) + 1];
-	strcpy(cmd, commands[mode]);
+	char cmd[strlen(commands[mode]) + strlen(params) + 1 + 5];
+	cmd[0] = '\0';
+	
+	// use sudo if required
+	//printf("requires_root: %d, use_sudo: %d\n", requires_root[mode], use_sudo);
+	if (requires_root[mode] && use_sudo == 1) {
+		//printf("sudo ...\n");
+		const char* sudo = "sudo ";
+    strcat(cmd, sudo);
+	}
+	
+	strcat(cmd, commands[mode]);
 	strcat(cmd, params);
 	printf("cmd: %s\n", cmd);
 	
@@ -311,6 +342,6 @@ int main(int argc, char **argv, char **envp) {
 	}
 
 	// return exitcode of the system call
-	if (rc > 255) rc = 255;
+	if (rc > 254) rc = 254;
 	return rc;
 }
