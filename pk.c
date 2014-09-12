@@ -18,6 +18,8 @@
 #include <libgen.h> // probably bsd only for `basename`
 #include <stdlib.h> // used for realloc
 
+#include <inttypes.h> // required on linux for uintN_t
+
 #define STRINGIFY(x) #x
 #define TOSTRING(x) STRINGIFY(x)
 
