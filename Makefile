@@ -4,7 +4,7 @@
 
 VERSION = "0.2"
 CC      = gcc
-CCFLAGS = -Wall
+CCFLAGS = -Wall -O3 
 RM      = rm
 #	os      = $(shell uname -o 2>/dev/null || echo 0)
 
@@ -26,6 +26,7 @@ CCFLAGS += -D $(OS) -D VERSION=$(VERSION)
 all:
 	@echo "Target OS: " $(OS)
 	$(CC) $(CCFLAGS) -o pk pk.c
+	#strip pk
 	[ ! -h pkm ] && ln -s pk pkm || true
 	[ ! -h pkc ] && ln -s pk pkc || true
 	[ ! -h pku ] && ln -s pk pku || true
