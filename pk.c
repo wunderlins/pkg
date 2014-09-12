@@ -6,8 +6,8 @@
  *
  * Goals:
  * - unified command set, DONE
- * - portable
- * - small
+ * - portable, DONE
+ * - small, DONE
  * - eventually add unified output for responses
  *
  * (c) 2014 Simon Wunderlin, simon()wunderlinDTnet
