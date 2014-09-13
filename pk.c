@@ -30,6 +30,79 @@
 #endif
 
 #define PK_MODES_LENGTH 7
+#define OUTPUT_DELIMITER "|"
+
+#define NUM_TOKENS 3
+#define MIN_SPACES 2
+typedef char tokens[NUM_TOKENS][80];
+
+/*
+typedef struct {
+	const int max_tokens;
+	const int mac_char;
+	int items;
+	tokens* t;
+} tokens_t;
+*/
+
+/**
+ * Split string by susequent spaces
+ *
+ * returns the number of elements
+ */
+int tokenize(tokens result, char* string) {
+	
+	char last;
+	int space_count = 0;
+	int i = 0;
+	int word = 0;
+	int length = strlen(string);
+	int buffer_l = 0;
+	char buffer[100] = "";
+	
+	// loop over the array character by character
+	for (i=0; i<length; i++) {
+		last = string[i];
+		
+		//printf("--->%c %d\n", last, space_count);
+		
+		if (last == ' ')
+			space_count++;
+		
+		if (space_count >= MIN_SPACES) {
+			buffer[buffer_l-1] = '\0'; // remove last space from buffer
+			strcpy(result[word++], buffer);
+			//printf("--> %s\n", buffer);
+			
+			// clear buffer
+			buffer[0] = '\0';
+			buffer_l = 0;
+			
+			// is the result array full?
+			if (word == NUM_TOKENS) {
+				break;
+			}
+			
+			// find next non space character
+			for (; string[i] == ' '; i++);
+			space_count = 0;
+			i--;
+			continue;
+		}
+		
+		// remeber character
+		buffer[buffer_l++] = last;
+		buffer[buffer_l] = '\0';
+	}
+	
+	// copy last buffer into the result
+	if (buffer[0] != '\0') {
+		strcpy(result[word++], buffer);
+		word++;
+	}
+	
+	return word-1;
+}
 
 typedef enum {
 	/* 0 */ NONE, 
@@ -181,7 +254,14 @@ const char *commands[PK_MODES_LENGTH] = {
 };
 
 void process_line(char *line) {
-		
+	
+	//printf("%s\n", line);
+	
+	int i;
+	size_t len = strlen(line);
+	char name[80] = "";
+	char desc[120] = "";
+	
 	switch(mode) {
 		case NONE:
 		case META:
@@ -194,14 +274,30 @@ void process_line(char *line) {
 			break;
 
 		case SEARCH:
-			//printf("Mode: SEARCH\n");
-			printf("%s\n", line);
+			// find the first occourence of " - ", split there.
+			// first token is the package name, 2nd token is the package's 
+			// description 
+			
+			for(i=0; i<len; i++) {
+				// if (line[i] == '-') printf("%d\n", i);
+					
+				if (line[i] == ' ' && line[i+1] == '-' && line[i+2] == ' ') {
+					// found delimiter, reduce the string length in name by 2
+					//name[i] = '\0';
+					//printf("-->%s\n", name);
+					memcpy(desc, &line[i+3], len-i-2);
+					break;
+				}
+				
+				name[i] = line[i];
+				name[i+1] = '\0';
+			}
+			
+			printf("%s%s%s\n", name, OUTPUT_DELIMITER, desc);
 			break;
 	}
 	
-	//printf("%s [%d]\n", line, mode);
 	fflush(stdout);
-	//return 0;
 }
 #endif
 

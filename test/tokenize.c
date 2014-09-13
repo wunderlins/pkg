@@ -10,14 +10,17 @@
 #include <string.h>
 
 #define NUM_TOKENS 3
+#define MIN_SPACES 2
 typedef char tokens[NUM_TOKENS][80];
 
+/*
 typedef struct {
 	const int max_tokens;
 	const int mac_char;
 	int items;
 	tokens* t;
 } tokens_t;
+*/
 
 /**
  * Split string by susequent spaces
@@ -27,19 +30,23 @@ typedef struct {
 int tokenize(tokens result, char* string) {
 	
 	char last;
-	int space_count, i, word = 0;
+	int space_count = 0;
+	int i = 0;
+	int word = 0;
 	int length = strlen(string);
-	char buffer[100] = "";
 	int buffer_l = 0;
+	char buffer[100] = "";
 	
 	// loop over the array character by character
 	for (i=0; i<length; i++) {
 		last = string[i];
 		
+		//printf("--->%c %d\n", last, space_count);
+		
 		if (last == ' ')
 			space_count++;
 		
-		if (space_count > 1) {
+		if (space_count >= MIN_SPACES) {
 			buffer[buffer_l-1] = '\0'; // remove last space from buffer
 			strcpy(result[word++], buffer);
 			//printf("--> %s\n", buffer);
@@ -48,7 +55,7 @@ int tokenize(tokens result, char* string) {
 			buffer[0] = '\0';
 			buffer_l = 0;
 			
-			// are we done?
+			// is the result array full?
 			if (word == NUM_TOKENS) {
 				break;
 			}
