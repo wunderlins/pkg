@@ -72,7 +72,7 @@ uint8_t requires_root[] = {
  * Function declarations
  */
 int parse_output(char *);
-int process_line(char *);
+void process_line(char *);
 int append(char *, char, int);
 int parse_output(char *);
 void usage();
@@ -88,10 +88,10 @@ const char *commands[PK_MODES_LENGTH] = {
 	/* 6 */ "pkg_add"  // pki - install package with name \$1
 };
 
-int process_line(char *line) {
+void process_line(char *line) {
 	printf("%s\n", line);
 	fflush(stdout);
-	return 0;
+	//return 0;
 }
 #endif
 
@@ -106,10 +106,65 @@ const char *commands[PK_MODES_LENGTH] = {
 	/* 6 */ "port install"  // pki - install package with name \$1
 };
 
-int process_line(char *line) {
-	printf("%s\n", line);
+void process_line(char *line) {
+	
+	int i = 0;
+	int o = 0;
+	char out[strlen(line) + 1];
+	
+	switch(mode) {
+		case NONE:
+		case META:
+		case UPDATEABLE:
+		case UPDATE:
+		case LIST:
+		case INSTALL:
+		default:
+			printf("%s\n", line);
+			break;
+			
+		case SEARCH:
+			//printf("Mode: SEARCH\n");
+			//printf("%s\n", line);
+			
+			// name
+			for(; line[i] != ' '; i++) {
+				out[o++] = line[i];
+				out[o] = '\0';
+			}
+			
+			out[o++] = '|';
+			out[o] = '\0';
+			
+			// skip all spaces
+			for(; line[i] == ' '; i++);
+			
+			// keep version
+			i++;
+			for(; line[i] != ' '; i++) {
+				out[o++] = line[i];
+				out[o] = '\0';
+			}
+			
+			out[o++] = '|';
+			out[o] = '\0';
+			
+			// skip all spaces
+			for(; line[i] == ' '; i++);
+			
+			// keep module
+			for(; line[i] != ' ' && line[i] != '\0'; i++) {
+				out[o++] = line[i];
+				out[o] = '\0';
+			}
+			
+			printf("%s\n", out);
+			break;
+	}
+	
+	//printf("%s [%d]\n", line, mode);
 	fflush(stdout);
-	return 0;
+	//return 0;
 }
 #endif
 
@@ -125,7 +180,7 @@ const char *commands[PK_MODES_LENGTH] = {
 	/* 6 */ "apt-get install"  // pki - install package with name \$1
 };
 
-int process_line(char *line) {
+void process_line(char *line) {
 		
 	switch(mode) {
 		case NONE:
@@ -146,7 +201,7 @@ int process_line(char *line) {
 	
 	//printf("%s [%d]\n", line, mode);
 	fflush(stdout);
-	return 0;
+	//return 0;
 }
 #endif
 
@@ -161,7 +216,7 @@ int parse_output(char *buffer) {
 	// printf("°[%d] %s", strlen(buffer), buffer);
 	// return 1;
 	
-	// loop trough buffer and find newline characters
+	// loop through buffer and find newline characters
 	int i = 0;
 	for(i=0; i<buffer_length; i++) {
 		if (buffer[i] == '\0') {
@@ -170,7 +225,8 @@ int parse_output(char *buffer) {
 		}
 		
 		if (buffer[i] == '\n') {
-			printf("%s\n", output_line);
+			//printf("%s\n", output_line);
+			process_line(output_line);
 			output_line[0] = '\0';
 			
 			//printf("%c", buffer[i]);
@@ -295,7 +351,14 @@ int main(int argc, char **argv, char **envp) {
 		strcat(tmp, " ");
 		strcat(tmp, argv[i]);
 		
+		// add asterisk for port at the end of the search parameter
+		#ifdef Darwin
+		if (mode == SEARCH)
+			strcat(tmp, "*");
+		#endif
 		params = tmp;
+		
+		//printf("params: %s\n", params);
 	}
 	
 	// check parameter count
