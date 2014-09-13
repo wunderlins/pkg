@@ -181,9 +181,14 @@ const char *commands[PK_MODES_LENGTH] = {
 
 void process_line(char *line) {
 	
+	tokens result;
+	int count;
+	
+	/*
 	int i = 0;
 	int o = 0;
 	char out[strlen(line) + 1];
+	*/
 	
 	switch(mode) {
 		case NONE:
@@ -197,6 +202,7 @@ void process_line(char *line) {
 			break;
 			
 		case SEARCH:
+			/*
 			//printf("Mode: SEARCH\n");
 			//printf("%s\n", line);
 			
@@ -230,14 +236,15 @@ void process_line(char *line) {
 				out[o++] = line[i];
 				out[o] = '\0';
 			}
+			*/
 			
-			printf("%s\n", out);
+			count = tokenize(result, line);
+			
+			printf("%s%s%s\n", result[0], OUTPUT_DELIMITER, result[2]);
 			break;
 	}
 	
-	//printf("%s [%d]\n", line, mode);
 	fflush(stdout);
-	//return 0;
 }
 #endif
 
