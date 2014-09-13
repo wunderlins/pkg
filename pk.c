@@ -36,14 +36,6 @@
 #define MIN_SPACES 2
 typedef char tokens[NUM_TOKENS][80];
 
-/*
-typedef struct {
-	const int max_tokens;
-	const int mac_char;
-	int items;
-	tokens* t;
-} tokens_t;
-*/
 
 /**
  * Split string by susequent spaces
@@ -184,12 +176,6 @@ void process_line(char *line) {
 	tokens result;
 	int count;
 	
-	/*
-	int i = 0;
-	int o = 0;
-	char out[strlen(line) + 1];
-	*/
-	
 	switch(mode) {
 		case NONE:
 		case META:
@@ -202,44 +188,7 @@ void process_line(char *line) {
 			break;
 			
 		case SEARCH:
-			/*
-			//printf("Mode: SEARCH\n");
-			//printf("%s\n", line);
-			
-			// name
-			for(; line[i] != ' '; i++) {
-				out[o++] = line[i];
-				out[o] = '\0';
-			}
-			
-			out[o++] = '|';
-			out[o] = '\0';
-			
-			// skip all spaces
-			for(; line[i] == ' '; i++);
-			
-			// keep version
-			i++;
-			for(; line[i] != ' '; i++) {
-				out[o++] = line[i];
-				out[o] = '\0';
-			}
-			
-			out[o++] = '|';
-			out[o] = '\0';
-			
-			// skip all spaces
-			for(; line[i] == ' '; i++);
-			
-			// keep module
-			for(; line[i] != ' ' && line[i] != '\0'; i++) {
-				out[o++] = line[i];
-				out[o] = '\0';
-			}
-			*/
-			
 			count = tokenize(result, line);
-			
 			printf("%s%s%s\n", result[0], OUTPUT_DELIMITER, result[2]);
 			break;
 	}
@@ -340,25 +289,6 @@ int parse_output(char *buffer) {
 		// output_line[i+1] = '\0';
 		append(output_line, buffer[i], i);
 		continue;
-		
-		// terminate at the endo of a c string
-		if (buffer[i] == '\0') {
-			//strcat(output_line, &(buffer[i]));
-			//printf("+[%d] %s %s\n", i, output_line, "End of String");
-			//process_line(output_line);
-			output_line[0] = '\0';
-			break;
-		}
-		
-		// process line if we have found a newline character
-		if (buffer[i] == '\n') {
-			//printf("-[%d] %s %s\n", i, output_line, "Newline");
-			//process_line(output_line);
-			output_line[0] = '\0';
-			break;
-		}
-		
-		strcat(output_line, &(buffer[i]));
 	}
 	
 	//printf("%s", buffer);
@@ -371,8 +301,6 @@ int parse_output(char *buffer) {
  * Usage information
  */
 void usage() {
-	//char *msg =
-	
 	printf("Platform independent package manager.\n\n"
 				 "Usage: pks [name] # search package\n"
 				 "       pki [name] # install package\n"
@@ -409,14 +337,7 @@ int main(int argc, char **argv, char **envp) {
 	if (cuse_sudo != NULL) {
 		//printf("env: %s\n", use_sudo);
 		use_sudo = atoi(&cuse_sudo[0]);
-		
-		/*
-		if (use_sudo == 1) {
-			;
-		}
-		*/
 	}
-	//printf("Automatically using sudo: %d\n", use_sudo);
 	
 	// check action (index 2 in executable name)
 	char *arg0 = basename(argv[0]);
@@ -470,15 +391,6 @@ int main(int argc, char **argv, char **envp) {
 		usage();
 		return 3;
 	}
-	
-	// check if we need super user rights
-	// TODO: implement
-	/*
-	if (requires_root[mode]) {
-		
-		return 4;
-	}
-	*/
 	
 	// run the command
 	int rc = -1;
