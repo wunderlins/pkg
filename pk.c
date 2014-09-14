@@ -30,9 +30,9 @@
 #endif
 
 #define PK_MODES_LENGTH 7
-#define OUTPUT_DELIMITER "|"
+#define OUTPUT_DELIMITER "\t"
 
-#define NUM_TOKENS 3
+#define NUM_TOKENS 5
 #define MIN_SPACES 2
 typedef char tokens[NUM_TOKENS][80];
 
@@ -213,6 +213,7 @@ void process_line(char *line) {
 	
 	//printf("%s\n", line);
 	
+	tokens result;
 	int i;
 	size_t len = strlen(line);
 	char name[80] = "";
@@ -223,12 +224,27 @@ void process_line(char *line) {
 		case META:
 		case UPDATEABLE:
 		case UPDATE:
-		case LIST:
 		case INSTALL:
 		default:
 			printf("%s\n", line);
 			break;
 
+		case LIST:
+			/**
+			 * example output line:
+			 * ii  accountsservice                       0.6.21-8                           amd64        query and manipulate user account information
+			 */
+			
+			// char 2,3 must be ' '
+			if (len > 3 && !(line[2] == ' ' && line[3] == ' '))
+				break;
+			
+			tokenize(result, line);
+			printf("%s%s%s\n", result[1], OUTPUT_DELIMITER, result[4]);
+			//printf("%s\n", line);
+			
+			break;
+		
 		case SEARCH:
 			// find the first occourence of " - ", split there.
 			// first token is the package name, 2nd token is the package's 
