@@ -181,12 +181,12 @@ void process_line(char *line) {
 		case META:
 		case UPDATEABLE:
 		case UPDATE:
-		case LIST:
 		case INSTALL:
 		default:
 			printf("%s\n", line);
 			break;
 			
+		case LIST:
 		case SEARCH:
 			count = tokenize(result, line);
 			printf("%s%s%s\n", result[0], OUTPUT_DELIMITER, result[2]);
