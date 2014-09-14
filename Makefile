@@ -2,7 +2,7 @@
 
 .PHONY: changelog
 
-VERSION = "0.2"
+VERSION = “0.2.1”
 CC      = gcc
 CCFLAGS = -Wall -O3 
 RM      = rm

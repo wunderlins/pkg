@@ -30,7 +30,7 @@
 #endif
 
 #define PK_MODES_LENGTH 7
-#define OUTPUT_DELIMITER "\t"
+#define OUTPUT_DELIMITER "|"
 
 #define NUM_TOKENS 5
 #define MIN_SPACES 2
@@ -60,6 +60,8 @@ int tokenize(tokens result, char* string) {
 		
 		if (last == ' ')
 			space_count++;
+		else
+			space_count = 0;
 		
 		if (space_count >= MIN_SPACES) {
 			buffer[buffer_l-1] = '\0'; // remove last space from buffer
@@ -240,6 +242,7 @@ void process_line(char *line) {
 				break;
 			
 			tokenize(result, line);
+			//printf("%s\n", line);
 			printf("%s%s%s\n", result[1], OUTPUT_DELIMITER, result[4]);
 			//printf("%s\n", line);
 			
