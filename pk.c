@@ -36,68 +36,6 @@
 #define MIN_SPACES 2
 typedef char tokens[NUM_TOKENS][80];
 
-
-/**
- * Split string by susequent spaces
- *
- * returns the number of elements
- */
-int tokenize(tokens result, char* string) {
-	
-	char last;
-	int space_count = 0;
-	int i = 0;
-	int word = 0;
-	int length = strlen(string);
-	int buffer_l = 0;
-	char buffer[100] = "";
-	
-	// loop over the array character by character
-	for (i=0; i<length; i++) {
-		last = string[i];
-		
-		//printf("--->%c %d\n", last, space_count);
-		
-		if (last == ' ')
-			space_count++;
-		else
-			space_count = 0;
-		
-		if (space_count >= MIN_SPACES) {
-			buffer[buffer_l-1] = '\0'; // remove last space from buffer
-			strcpy(result[word++], buffer);
-			//printf("--> %s\n", buffer);
-			
-			// clear buffer
-			buffer[0] = '\0';
-			buffer_l = 0;
-			
-			// is the result array full?
-			if (word == NUM_TOKENS) {
-				break;
-			}
-			
-			// find next non space character
-			for (; string[i] == ' '; i++);
-			space_count = 0;
-			i--;
-			continue;
-		}
-		
-		// remeber character
-		buffer[buffer_l++] = last;
-		buffer[buffer_l] = '\0';
-	}
-	
-	// copy last buffer into the result
-	if (buffer[0] != '\0') {
-		strcpy(result[word++], buffer);
-		word++;
-	}
-	
-	return word-1;
-}
-
 typedef enum {
 	/* 0 */ NONE, 
 	/* 1 */ META, 
@@ -138,6 +76,7 @@ uint8_t requires_root[] = {
 /**
  * Function declarations
  */
+int tokenize(tokens, char*);
 int parse_output(char *);
 void process_line(char *);
 int append(char *, char, int);
@@ -242,9 +181,7 @@ void process_line(char *line) {
 				break;
 			
 			tokenize(result, line);
-			//printf("%s\n", line);
 			printf("%s%s%s\n", result[1], OUTPUT_DELIMITER, result[4]);
-			//printf("%s\n", line);
 			
 			break;
 		
@@ -257,9 +194,7 @@ void process_line(char *line) {
 				// if (line[i] == '-') printf("%d\n", i);
 					
 				if (line[i] == ' ' && line[i+1] == '-' && line[i+2] == ' ') {
-					// found delimiter, reduce the string length in name by 2
-					//name[i] = '\0';
-					//printf("-->%s\n", name);
+					// found delimiter
 					memcpy(desc, &line[i+3], len-i-2);
 					break;
 				}
@@ -276,16 +211,83 @@ void process_line(char *line) {
 }
 #endif
 
+/**
+ * Split string by susequent spaces
+ *
+ * returns the number of elements
+ */
+int tokenize(tokens result, char* string) {
+	
+	char last;
+	int space_count = 0;
+	int i = 0;
+	int word = 0;
+	int length = strlen(string);
+	int buffer_l = 0;
+	char buffer[100] = "";
+	
+	// loop over the array character by character
+	for (i=0; i<length; i++) {
+		last = string[i];
+		
+		//printf("--->%c %d\n", last, space_count);
+		
+		if (last == ' ')
+			space_count++;
+		else
+			space_count = 0;
+		
+		if (space_count >= MIN_SPACES) {
+			buffer[buffer_l-1] = '\0'; // remove last space from buffer
+			strcpy(result[word++], buffer);
+			//printf("--> %s\n", buffer);
+			
+			// clear buffer
+			buffer[0] = '\0';
+			buffer_l = 0;
+			
+			// is the result array full?
+			if (word == NUM_TOKENS) {
+				break;
+			}
+			
+			// find next non space character
+			for (; string[i] == ' '; i++);
+			space_count = 0;
+			i--;
+			continue;
+		}
+		
+		// remeber character
+		buffer[buffer_l++] = last;
+		buffer[buffer_l] = '\0';
+	}
+	
+	// copy last buffer into the result
+	if (buffer[0] != '\0') {
+		strcpy(result[word++], buffer);
+		word++;
+	}
+	
+	return word-1;
+}
+
+/**
+ * Append a character to char array
+ */
 int append(char *str, char c, int index) {
 	str[index] = c;
 	str[index+1] = '\0';
 	return 0;
 }
 
+/**
+ * parse outut stream from popen
+ *
+ * split stream by '\n', run line parser on any line. the line parser is
+ * package manager dependent
+ */
 int parse_output(char *buffer) {
-	
-	// printf("°[%d] %s", strlen(buffer), buffer);
-	// return 1;
 	
 	// loop through buffer and find newline characters
 	int i = 0;
@@ -303,15 +305,9 @@ int parse_output(char *buffer) {
 			//printf("%c", buffer[i]);
 		}
 		
-		//strcat(output_line, buffer[i]);
-		//output_line[i] = buffer[i];
-		// output_line[i+1] = '\0';
 		append(output_line, buffer[i], i);
 		continue;
 	}
-	
-	//printf("%s", buffer);
-	//fflush(stdout);
 	
 	return 0;
 }
@@ -361,7 +357,6 @@ int main(int argc, char **argv, char **envp) {
 	// check action (index 2 in executable name)
 	char *arg0 = basename(argv[0]);
 	
-	//printf("%d\n", (int) strlen(arg0));
 	if (strlen(arg0) != 3) {
 		printf("Wrong program name '%s' (%lu).\n\n", arg0, strlen(arg0));
 		usage();
@@ -423,7 +418,7 @@ int main(int argc, char **argv, char **envp) {
 	if (requires_root[mode] && use_sudo == 1) {
 		//printf("sudo ...\n");
 		const char* sudo = "sudo ";
-    strcat(cmd, sudo);
+		strcat(cmd, sudo);
 	}
 	
 	strcat(cmd, commands[mode]);
@@ -438,8 +433,7 @@ int main(int argc, char **argv, char **envp) {
 		size_t len = sizeof(buffer)-1;
 		while (fgets(buffer, len, fp) != NULL) {
 			
-			// TODO: parse output
-			//printf("%s", buffer); return 1;
+			// parse output
 			parse_output(buffer);
 		}
 		rc = pclose(fp);
