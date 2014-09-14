@@ -95,9 +95,40 @@ const char *commands[PK_MODES_LENGTH] = {
 };
 
 void process_line(char *line) {
-	printf("%s\n", line);
+	int c = 0;
+	int s = 0;
+	char name[100] = "";
+	char desc[100] = "";
+	size_t len = strlen(line);
+	
+	switch(mode) {
+		case NONE:
+		case META:
+		case UPDATEABLE:
+		case UPDATE:
+		case INSTALL:
+		default:
+			printf("%s\n", line);
+			break;
+			
+		case SEARCH:
+			printf("%s%s\n", line, OUTPUT_DELIMITER);
+			break;
+		
+		case LIST:
+			// find first space
+			while(line[c++] != ' '); // first space
+			s = c;
+			while(line[s++] == ' '); // beginning of next string
+			
+			memcpy(name, &line[0], c-1);
+			memcpy(desc, &line[s-1], len-s+1);
+			
+			printf("%s%s%s\n", name, OUTPUT_DELIMITER, desc);
+			break;
+	}
+	
 	fflush(stdout);
-	//return 0;
 }
 #endif
 
