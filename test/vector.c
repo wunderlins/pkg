@@ -14,6 +14,7 @@ size_t init_strvector(StrVector* v, size_t num_elements, size_t str_length);
 size_t add_strvector(StrVector* v, char* element);
 size_t _expand_strvector(StrVector* v);
 void display_vector(StrVector* v);
+void free_strvector(StrVector* v);
 
 size_t init_strvector(StrVector* v, size_t num_elements, size_t str_length) {
 	v->count = 0;
@@ -22,9 +23,16 @@ size_t init_strvector(StrVector* v, size_t num_elements, size_t str_length) {
 	v->str_length = str_length;
 	
 	// FIXME: allocate enough pointers and the allocate space for each array element in a loop
-	v->data = malloc( sizeof(char) * (str_length+1) * num_elements );
+	v->data = malloc( sizeof(char*) * v->size );
 	if (v->data == NULL)
 		return 0;
+	
+	int i;
+	for (i=0; i<v->size; i++) {
+    v->data[i] = malloc(sizeof(char) * (v->str_length + 1));
+		if (v->data[i] == NULL)
+			return 0;
+	}
 	
 	return num_elements;
 }
@@ -35,27 +43,38 @@ size_t add_strvector(StrVector* v, char* element) {
 	if (v->count+1 > v->size) {
 		// extend array
 		size_t r = _expand_strvector(v);
-		if (r == 0) {
+		if (r == 0)
 			return 0;
-		}
 	}
 	
 	//v->data[v->count] = element;
-	//printf("size: %lu %p\n", strlen(element), &(v->data[v->count]));
-	memcpy(&(v->data[v->count]), &(element), strlen(element));
-	v->count++;
+	//printf("size: %lu %p %lu\n", sizeof(char) * v->str_length+1, &v->data[v->count], v->count);
+	memcpy((v->data[v->count]), element, sizeof(char) * v->str_length+1);
+	(v->count)++;
 	
 	return v->count;
 }
 
 size_t _expand_strvector(StrVector* v) {
-	v->data = realloc(v->data, sizeof(v->data) + sizeof(char) * (v->str_length+1) * v->_add);
+	v->data = realloc(v->data, sizeof(char*) * (v->_add + v->size));
 	if (v->data == NULL)
 		return 0;
+	
+	size_t i;
+	for (i=v->size; i<v->size+v->_add; i++) {
+		//printf("%zu\n", i);
+    v->data[i] = malloc(sizeof(char) * (v->str_length + 1));
+		if (v->data[i] == NULL)
+			return 0;
+	}
 	
 	v->size += v->_add;
 	
 	return v->size;
+}
+
+void free_strvector(StrVector* v) {
+	free(v->data);
 }
 
 void display_vector(StrVector* v) {
@@ -68,19 +87,27 @@ void display_vector(StrVector* v) {
 int main(int argc, char** argv) {
 	
 	StrVector v;
-	int r = init_strvector(&v, 10, 10);
+	int r = init_strvector(&v, 10, 15);
 	
 	int i;
-	char* str = "0123456789";
+	char* str = "0123456789000--";
 	for (i=0; i<10; i++) {
 		add_strvector(&v, str);
 	}
-	//free(str);
+	
+	//v.data[11] = "-012345678901234";
+	//v.count = 12;
+	
+	char* str2 = malloc(sizeof(char) * 5);
+	free(str2);
 	
 	// printf("Test 1: %s\n", v.data[0]);
 	display_vector(&v);
 	
 	printf("Vector size: %lu, count %lu\n", v.size, v.count);
+	free_strvector(&v);
+	
+	//display_vector(&v);
 	
 	return 0;
 }
