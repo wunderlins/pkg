@@ -24,6 +24,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+const char* _stringarray_null = "";
+
 /**
  * This structure holds an array of strings including the number of items, 
  * allocated memory and length of string elements
@@ -34,7 +36,7 @@ typedef struct {
 	size_t _add;       // number of elements to add if the array is full
 	size_t str_length; // length of a single array element
 	char** elements;   // actual data
-	char* _null;
+	const char* _null;
 } StringArray;
 
 /**
@@ -136,7 +138,7 @@ StringArray* stringarray_init(size_t num_elements, size_t str_length) {
 	v->size = num_elements;
 	v->_add = num_elements;
 	v->str_length = str_length;
-	v->_null = "";
+	v->_null = _stringarray_null;
 	
 	// allocate enough pointers for the strings 
 	v->elements = malloc( sizeof(char*) * v->size );
@@ -146,7 +148,7 @@ StringArray* stringarray_init(size_t num_elements, size_t str_length) {
 	// allocate space for each array element
 	int i;
 	for (i=0; i<v->size; i++) {
-		v->elements[i] = v->_null; // malloc(sizeof(char) * (v->str_length + 1));
+		v->elements[i] = (char*) v->_null; // malloc(sizeof(char) * (v->str_length + 1));
 		if (v->elements[i] == NULL)
 			return NULL;
 	}
@@ -227,7 +229,7 @@ size_t _stringarray_expand(StringArray* v) {
 	// pre allocate memory for the ne members
 	size_t i;
 	for (i=v->size; i<v->size+v->_add; i++) {
-		v->elements[i] = v->_null; // malloc(sizeof(char) * (v->str_length + 1));
+		v->elements[i] = (char*) v->_null; // malloc(sizeof(char) * (v->str_length + 1));
 		if (v->elements[i] == NULL)
 			return 0;
 	}
