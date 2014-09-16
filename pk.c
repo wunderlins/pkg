@@ -413,7 +413,7 @@ int main(int argc, char **argv, char **envp) {
 		len = len + sizeof(argv[i]) + sizeof(" ");
 		char *tmp;
 		if ((tmp = malloc(sizeof(params) + len + 1)) == NULL) {
-			printf("Failed to allocate memmory.\n");
+			printf("Failed to allocate memory.\n");
 			return 2;
 		}
 		strcpy(tmp, params);
