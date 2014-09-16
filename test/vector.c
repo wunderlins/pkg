@@ -34,6 +34,7 @@ typedef struct {
 	size_t _add;       // number of elements to add if the array is full
 	size_t str_length; // length of a single array element
 	char** elements;   // actual data
+	char* _null;
 } StringArray;
 
 /**
@@ -57,21 +58,21 @@ StringArray* stringarray_init(size_t num_elements, size_t str_length);
 /**
  * Add string to the array
  *
- * This function will add a string at the end of the array. It will also 
- * automatically enlarge ->elements if required. The value use to enlarge the 
+ * This function will add a string at the end of the array. It will also
+ * automatically enlarge ->elements if required. The value use to enlarge the
  * data storage is as large as the initial num_elements.
  *
- * You must check that the length of element does not exceed the 
+ * You must check that the length of element does not exceed the
  * internal str_length.
- * 
- * FIXME: check the size of the input string and make sure it fits into the target
  *
- * @param v 
+ * FIXME: check the size of the input string and make sure it fits into the target when adding an elements
+ *
+ * @param v
  * the string array to add the element to
- * 
+ *
  * @param element
  * A string that should not be larger than the internal string length
- * 
+ *
  * @return size_t number of elements (length) in the array or 0 on error (usually mem allocation problem)
  */
 size_t stringarray_add(StringArray* v, char* element);
@@ -82,9 +83,9 @@ size_t stringarray_add(StringArray* v, char* element);
  * This function will automatically enlarge ->elements if required. The value use
  * to enlarge the data storage is as large as the initial num_elements.
  *
- * @param v 
+ * @param v
  * the string array to add the element to
- * 
+ *
  * @return size_t number allocated elements in the array or 0 on error (usually mem allocation problem)
  */
 size_t _stringarray_expand(StringArray* v);
@@ -92,9 +93,9 @@ size_t _stringarray_expand(StringArray* v);
 /**
  * Free data
  *
- * Use this befrore free-ing the struct itself.
+ * Use this before free-ing the struct itself.
  *
- * @param v 
+ * @param v
  * the string array to add the element to
  */
 void stringarray_free(StringArray* v);
@@ -102,7 +103,9 @@ void stringarray_free(StringArray* v);
 /**
  * display the contents of the array line by line
  *
- * @param v 
+ * This function is mostly used for debugging.
+ *
+ * @param v
  * the string array to add the element to
  */
 void stringarray_display(StringArray* v);
@@ -113,7 +116,7 @@ void stringarray_display(StringArray* v);
  * Initialize memory for a StringArray and return pointer to object. Will
  * return NULL upon error (usually because memory could not be allocated).
  *
- * FIXME: might want to use errno upon error?
+ * TODO: might want to use errno upon error?
  *
  * @param num_elements
  * This is the number of array elements we are allocating memory for
@@ -133,6 +136,7 @@ StringArray* stringarray_init(size_t num_elements, size_t str_length) {
 	v->size = num_elements;
 	v->_add = num_elements;
 	v->str_length = str_length;
+	v->_null = "";
 	
 	// allocate enough pointers for the strings 
 	v->elements = malloc( sizeof(char*) * v->size );
@@ -142,7 +146,7 @@ StringArray* stringarray_init(size_t num_elements, size_t str_length) {
 	// allocate space for each array element
 	int i;
 	for (i=0; i<v->size; i++) {
-		v->elements[i] = malloc(sizeof(char) * (v->str_length + 1));
+		v->elements[i] = v->_null; // malloc(sizeof(char) * (v->str_length + 1));
 		if (v->elements[i] == NULL)
 			return NULL;
 	}
@@ -182,8 +186,16 @@ size_t stringarray_add(StringArray* v, char* element) {
 	
 	// FIXME: probably we need to handle NULL pointers in some meaningful way
 	
+	// printf("add\n");
+	// if no memory is allocated, do this now
+	if (v->elements[v->count] == v->_null) {
+		//free(v->elements[v->count]);
+		v->elements[v->count] = malloc(sizeof(char)*(strlen(element)+1));
+	}
+
+	// FIXME: if memory was allocated, free it and add data
+
 	// copy string into pre-allocated memory inside this object
-	// FIXME: check that every elements is copied into our own memory location!
 	memcpy(v->elements[v->count], element, sizeof(char) * v->str_length+1);
 	
 	// remeber the new element count
@@ -215,7 +227,7 @@ size_t _stringarray_expand(StringArray* v) {
 	// pre allocate memory for the ne members
 	size_t i;
 	for (i=v->size; i<v->size+v->_add; i++) {
-		v->elements[i] = malloc(sizeof(char) * (v->str_length + 1));
+		v->elements[i] = v->_null; // malloc(sizeof(char) * (v->str_length + 1));
 		if (v->elements[i] == NULL)
 			return 0;
 	}
@@ -229,7 +241,7 @@ size_t _stringarray_expand(StringArray* v) {
 /**
  * Free data
  *
- * Use this befrore free-ing the struct itself.
+ * Use this before free-ing the struct itself.
  *
  * @param v 
  * the string array to add the element to
