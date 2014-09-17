@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-const char* _stringarray_null = "";
+const char* _strarray_null = "";
 
 /**
  * This structure holds an array of strings including the number of items, 
@@ -36,12 +36,12 @@ typedef struct {
 	size_t str_length; // length of a single array element
 	char** elements;   // actual data
 	const char* _null;
-} StringArray;
+} StrArray;
 
 /**
  * Initialize
  *
- * Initialize memory for a StringArray and return pointer to object. Will
+ * Initialize memory for a strarray and return pointer to object. Will
  * return NULL upon error (usually because memory could not be allocated).
  *
  * TODO: might want to use errno upon error?
@@ -52,9 +52,9 @@ typedef struct {
  * @param str_length
  * The maximum length of a string (excluding the \0 delimiter)
  *
- * @return StringArray* on success or NULL
+ * @return strarray* on success or NULL
  */
-StringArray* stringarray_init(size_t num_elements, size_t str_length);
+StrArray* strarray_init(size_t num_elements, size_t str_length);
 
 /**
  * Add string to the array
@@ -76,7 +76,7 @@ StringArray* stringarray_init(size_t num_elements, size_t str_length);
  *
  * @return size_t number of elements (length) in the array or 0 on error (usually mem allocation problem)
  */
-size_t stringarray_add(StringArray* v, char* element);
+size_t strarray_add(StrArray* v, char* element);
 
 /**
  * Set an array value
@@ -95,7 +95,7 @@ size_t stringarray_add(StringArray* v, char* element);
  * 
  * @return size_t number of elements (length) in the array or 0 on error (usually mem allocation problem)
  */
-size_t stringarray_set(StringArray* v, char* element, size_t pos);
+size_t strarray_set(StrArray* v, char* element, size_t pos);
 
 /**
  * Make storage larger
@@ -108,7 +108,7 @@ size_t stringarray_set(StringArray* v, char* element, size_t pos);
  *
  * @return size_t number allocated elements in the array or 0 on error (usually mem allocation problem)
  */
-size_t _stringarray_expand(StringArray* v);
+size_t _strarray_expand(StrArray* v);
 
 /**
  * Free data
@@ -118,7 +118,7 @@ size_t _stringarray_expand(StringArray* v);
  * @param v
  * the string array to add the element to
  */
-void stringarray_free(StringArray* v);
+void strarray_free(StrArray* v);
 
 /**
  * display the contents of the array line by line
@@ -128,12 +128,12 @@ void stringarray_free(StringArray* v);
  * @param v
  * the string array to add the element to
  */
-void stringarray_display(StringArray* v);
+void strarray_display(StrArray* v);
 
 /**
  * Initialize
  *
- * Initialize memory for a StringArray and return pointer to object. Will
+ * Initialize memory for a strarray and return pointer to object. Will
  * return NULL upon error (usually because memory could not be allocated).
  *
  * TODO: might want to use errno upon error?
@@ -144,19 +144,19 @@ void stringarray_display(StringArray* v);
  * @param str_length
  * The maximum length of a string (excluding the \0 delimiter)
  *
- * @return StringArray* on success or NULL
+ * @return strarray* on success or NULL
  */
-StringArray* stringarray_init(size_t num_elements, size_t str_length) {
+StrArray* strarray_init(size_t num_elements, size_t str_length) {
 	
 	// allocate memory for the struct that we will return
-	StringArray* v = malloc(sizeof(StringArray));
+	StrArray* v = malloc(sizeof(StrArray));
 	
 	// set attributes
 	v->count = 0;
 	v->size = num_elements;
 	v->_add = num_elements;
 	v->str_length = str_length;
-	v->_null = _stringarray_null;
+	v->_null = _strarray_null;
 	
 	// allocate enough pointers for the strings 
 	v->elements = malloc( sizeof(char*) * v->size );
@@ -194,12 +194,12 @@ StringArray* stringarray_init(size_t num_elements, size_t str_length) {
  * 
  * @return size_t number of elements (length) in the array or 0 on error (usually mem allocation problem)
  */
-size_t stringarray_add(StringArray* v, char* element) {
+size_t strarray_add(StrArray* v, char* element) {
 	
 	// check if the array is full
 	if (v->count+1 > v->size) {
 		// extend array
-		size_t r = _stringarray_expand(v);
+		size_t r = _strarray_expand(v);
 		if (r == 0)
 			return 0;
 	}
@@ -238,12 +238,12 @@ size_t stringarray_add(StringArray* v, char* element) {
  * 
  * @return size_t number of elements (length) in the array or 0 on error (usually mem allocation problem)
  */
-size_t stringarray_set(StringArray* v, char* element, size_t pos) {
+size_t strarray_set(StrArray* v, char* element, size_t pos) {
 	
 	int append = 0;
 	while (pos > v->size) {
 		// extend array
-		size_t r = _stringarray_expand(v);
+		size_t r = _strarray_expand(v);
 		if (r == 0)
 			return 0;
 		
@@ -281,7 +281,7 @@ size_t stringarray_set(StringArray* v, char* element, size_t pos) {
  * 
  * @return size_t number allocated elements in the array or 0 on error (usually mem allocation problem)
  */
-size_t _stringarray_expand(StringArray* v) {
+size_t _strarray_expand(StrArray* v) {
 	
 	// try to allocate more memory for data		
 	v->elements = realloc(v->elements, sizeof(char*) * (v->_add + v->size));
@@ -312,7 +312,7 @@ size_t _stringarray_expand(StringArray* v) {
  * @param v 
  * the string array to add the element to
  */
-void stringarray_free(StringArray* v) {
+void strarray_free(StrArray* v) {
 	// free the elements array, after this call no elements will be available
 	free(v->elements);
 }
@@ -325,7 +325,7 @@ void stringarray_free(StringArray* v) {
  * @param v 
  * the string array to add the element to
  */
-void stringarray_display(StringArray* v) {
+void strarray_display(StrArray* v) {
 	// loop over all set elements and display them.
 	size_t i;
 	for (i=0; i<v->count; i++) {
@@ -338,30 +338,30 @@ void stringarray_display(StringArray* v) {
  */
 int main(int argc, char** argv) {
 	
-	// allocate StringArray
-	StringArray* v = stringarray_init(10, 15);
+	// allocate strarray
+	StrArray* v = strarray_init(10, 15);
 	
 	// populate the array with dummy data
 	int i;
 	char* str = malloc(sizeof(char)*16);
 	memcpy(str, "0123456789000--", 16);
 	for (i=0; i<11; i++) {
-		stringarray_add(v, str);
+		strarray_add(v, str);
 	}
 	
-	stringarray_set(v, "12345", 23);
-	stringarray_set(v, "12345", 4);
+	strarray_set(v, "12345", 23);
+	strarray_set(v, "12345", 4);
 	
 	// free the original string
 	free(str);
 	
 	// display all array elements fro mthe array
-	printf("Memory location of StringArray: %p\n", v);
-	stringarray_display(v);
+	printf("Memory location of strarray: %p\n", v);
+	strarray_display(v);
 	printf("Array dimensions: %lu, count %lu\n", v->size, v->count);
 	
 	// release the memory, destroy the object and it's data
-	stringarray_free(v);
+	strarray_free(v);
 	free(v);
 	
 	return 0;
