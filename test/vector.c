@@ -273,17 +273,17 @@ size_t strarray_remove(StrArray* v, size_t pos) {
 		return 0;
 
 	// if it exists, free memory
-	if (v->elements[pos] != v->_null && v->elements[pos] != NULL)
-		free(v->elements[pos]);
+	//if (v->elements[pos] != v->_null && v->elements[pos] != NULL)
+	//	free(v->elements[pos]);
 
 	// move all subsequent elements to the front by one
 	for(i=pos; i < v->count-1; i++)
 		v->elements[i] = v->elements[i+1];
 
 	// update count
-	// FIXME: fix bug with last array element after remove
-	if (v->elements[v->count-1] != v->_null && v->elements[v->count-1] != NULL)
-		free(v->elements[v->count-1]);
+	// FIXME: fix bug with last array element after remove, set _null to empty elements
+	//if (v->elements[v->count-1] != v->_null && v->elements[v->count-1] != NULL)
+	//	free(v->elements[v->count-1]);
 
 	return --(v->count);
 }
@@ -374,9 +374,10 @@ int main(int argc, char** argv) {
 	// free the original string
 	free(str);
 	
-	strarray_display(v);
+	//strarray_display(v);
 
 	strarray_remove(v, 12);
+	strarray_remove(v, 8);
 
 	// display all array elements fro mthe array
 	printf("Memory location of strarray: %p\n", v);
