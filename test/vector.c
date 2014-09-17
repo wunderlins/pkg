@@ -240,14 +240,11 @@ size_t strarray_add(StrArray* v, char* element) {
  */
 size_t strarray_set(StrArray* v, char* element, size_t pos) {
 	
-	int append = 0;
 	while (pos > v->size) {
 		// extend array
 		size_t r = _strarray_expand(v);
 		if (r == 0)
 			return 0;
-		
-		append = 1;
 	}
 	
 	//printf("Expanded\n");
@@ -263,12 +260,33 @@ size_t strarray_set(StrArray* v, char* element, size_t pos) {
 	
 	//printf("Added\n");
 	
-	if (append)
+	if (pos+1 > v->count)
 		v->count = pos+1;
 	
 	return v->count;
 }
 
+size_t strarray_remove(StrArray* v, size_t pos) {
+	size_t i = 0;
+	// check if element exists
+	if (pos >= v->count)
+		return 0;
+
+	// if it exists, free memory
+	if (v->elements[pos] != v->_null && v->elements[pos] != NULL)
+		free(v->elements[pos]);
+
+	// move all subsequent elements to the front by one
+	for(i=pos; i < v->count-1; i++)
+		v->elements[i] = v->elements[i+1];
+
+	// update count
+	// FIXME: fix bug with last array element after remove
+	if (v->elements[v->count-1] != v->_null && v->elements[v->count-1] != NULL)
+		free(v->elements[v->count-1]);
+
+	return --(v->count);
+}
 
 /**
  * Make storage larger
@@ -345,16 +363,21 @@ int main(int argc, char** argv) {
 	int i;
 	char* str = malloc(sizeof(char)*16);
 	memcpy(str, "0123456789000--", 16);
-	for (i=0; i<11; i++) {
+	for (i=0; i<12; i++) {
 		strarray_add(v, str);
 	}
 	
-	strarray_set(v, "12345", 23);
+	strarray_set(v, "12345", 19);
 	strarray_set(v, "12345", 4);
+	strarray_set(v, "12345", 13);
 	
 	// free the original string
 	free(str);
 	
+	strarray_display(v);
+
+	strarray_remove(v, 12);
+
 	// display all array elements fro mthe array
 	printf("Memory location of strarray: %p\n", v);
 	strarray_display(v);
