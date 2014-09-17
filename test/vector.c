@@ -11,7 +11,6 @@
  * allocated to store new members of the string array. lenght of strings is
  * fixed and set upon initialisation.
  *
- * TODO: add set(num) method
  * TODO: add remove(num) method
  * TODO: add get_length method
  * TODO: add find method
@@ -78,6 +77,25 @@ StringArray* stringarray_init(size_t num_elements, size_t str_length);
  * @return size_t number of elements (length) in the array or 0 on error (usually mem allocation problem)
  */
 size_t stringarray_add(StringArray* v, char* element);
+
+/**
+ * Set an array value
+ *
+ * This method sets a value. If the element is past the current length, the 
+ * empty elements will be added inbetween.
+ *
+ * @param v 
+ * the string array to add the element to
+ * 
+ * @param element
+ * A string that should not be larger than the internal string length
+ * 
+ * @param pos
+ * Position (array index) where to add. Might be past the array's length
+ * 
+ * @return size_t number of elements (length) in the array or 0 on error (usually mem allocation problem)
+ */
+size_t stringarray_set(StringArray* v, char* element, size_t pos);
 
 /**
  * Make storage larger
@@ -204,6 +222,55 @@ size_t stringarray_add(StringArray* v, char* element) {
 }
 
 /**
+ * Set an array value
+ *
+ * This method sets a value. If the element is past the current length, the 
+ * empty elements will be added inbetween.
+ *
+ * @param v 
+ * the string array to add the element to
+ * 
+ * @param element
+ * A string that should not be larger than the internal string length
+ * 
+ * @param pos
+ * Position (array index) where to add. Might be past the array's length
+ * 
+ * @return size_t number of elements (length) in the array or 0 on error (usually mem allocation problem)
+ */
+size_t stringarray_set(StringArray* v, char* element, size_t pos) {
+	
+	int append = 0;
+	while (pos > v->size) {
+		// extend array
+		size_t r = _stringarray_expand(v);
+		if (r == 0)
+			return 0;
+		
+		append = 1;
+	}
+	
+	//printf("Expanded\n");
+	
+	// if no memory is allocated, do this now
+	if (v->elements[pos] == v->_null || v->elements[pos] == NULL) {
+		//free(v->elements[v->count]);
+		v->elements[pos] = malloc(sizeof(char)*(strlen(element)+1));
+	}
+	
+	// copy string into pre-allocated memory inside this object
+	memcpy(v->elements[pos], element, sizeof(char) * v->str_length+1);
+	
+	//printf("Added\n");
+	
+	if (append)
+		v->count = pos+1;
+	
+	return v->count;
+}
+
+
+/**
  * Make storage larger
  *
  * This function will automatically enlarge ->elements if required. The value use
@@ -281,6 +348,9 @@ int main(int argc, char** argv) {
 	for (i=0; i<11; i++) {
 		stringarray_add(v, str);
 	}
+	
+	stringarray_set(v, "12345", 23);
+	stringarray_set(v, "12345", 4);
 	
 	// free the original string
 	free(str);
