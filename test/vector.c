@@ -186,11 +186,8 @@ size_t stringarray_add(StringArray* v, char* element) {
 			return 0;
 	}
 	
-	// FIXME: probably we need to handle NULL pointers in some meaningful way
-	
-	// printf("add\n");
 	// if no memory is allocated, do this now
-	if (v->elements[v->count] == v->_null) {
+	if (v->elements[v->count] == v->_null || v->elements[v->count] == NULL) {
 		//free(v->elements[v->count]);
 		v->elements[v->count] = malloc(sizeof(char)*(strlen(element)+1));
 	}
