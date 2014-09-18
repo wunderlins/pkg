@@ -64,8 +64,6 @@ StrArray* strarray_init(size_t num_elements, size_t str_length);
  * You must check that the length of element does not exceed the
  * internal str_length.
  *
- * FIXME: check the size of the input string and make sure it fits into the target when adding an elements
- *
  * @param v
  * the string array to add the element to
  *
