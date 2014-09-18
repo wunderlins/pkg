@@ -15,11 +15,6 @@
  */
 
 /**
- * lame attempt to define a null value for an array element
- */
-const char* _strarray_null = "";
-
-/**
  * error number
  * 
  * every method that can return 0 or null will set an error number before returning in this variable.
@@ -58,7 +53,6 @@ typedef struct {
 	size_t _add;       // number of elements to add if the array is full
 	size_t str_length; // length of a single array element
 	char** elements;   // actual data
-	const char* _null;
 } StrArray;
 
 /**

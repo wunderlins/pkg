@@ -10,7 +10,8 @@
  * Using the provided mechanism will ensure that there is always enough memory 
  * allocated to store new members of the string array. lenght of strings is
  * fixed and set upon initialisation.
- *
+ * 
+ * TODO: variable length array, allocate all memory
  * TODO: add get_length method
  * TODO: add find method
  * TODO: add possibility to ad by reference
@@ -48,7 +49,6 @@ StrArray* strarray_init(size_t num_elements, size_t str_length) {
 	v->size = num_elements;
 	v->_add = num_elements;
 	v->str_length = str_length;
-	v->_null = _strarray_null;
 	
 	// allocate enough pointers for the strings 
 	v->elements = malloc( sizeof(char*) * v->size );
@@ -58,14 +58,14 @@ StrArray* strarray_init(size_t num_elements, size_t str_length) {
 	}
 	
 	// allocate space for each array element
+	// TODO: use _strarray_expand to initialize all elements
 	int i;
 	for (i=0; i<v->size; i++) {
-		v->elements[i] = (char*) v->_null; // malloc(sizeof(char) * (v->str_length + 1));
-		/*
+		v->elements[i] = malloc(sizeof(char) * (v->str_length + 1));
 		if (v->elements[i] == NULL) {
+			_strarray_errno = 1;
 			return NULL;
 		}
-		*/
 	}
 	
 	return v;
@@ -102,16 +102,6 @@ size_t strarray_add(StrArray* v, char* element) {
 		}
 	}
 	
-	// if no memory is allocated, do this now
-	if (v->elements[v->count] == v->_null || v->elements[v->count] == NULL) {
-		//free(v->elements[v->count]);
-		v->elements[v->count] = malloc(sizeof(char)*(v->str_length+1));
-		if (v->elements[v->count] == NULL) {
-			_strarray_errno = 1;
-			return 0;
-		}
-	}
-
 	// check the size of the input string and make sure it fits into the target
 	// when adding an elements
 	if (strlen(element) > v->str_length) {
@@ -158,17 +148,8 @@ size_t strarray_set(StrArray* v, char* element, size_t pos) {
 			
 	}
 	
-	//printf("Expanded\n");
-	
-	// if no memory is allocated, do this now
-	if (v->elements[pos] == v->_null || v->elements[pos] == NULL) {
-		//free(v->elements[v->count]);
-		v->elements[pos] = malloc(sizeof(char)*(v->str_length+1));
-		if (v->elements[pos] == NULL) {
-			_strarray_errno = 1;
-			return 0;
-		}
-	}
+	// FIXME: check new string length
+	// FIXME: make strarray_add() use strarray_set() (this function)
 	
 	// copy string into pre-allocated memory inside this object
 	memcpy(v->elements[pos], element, sizeof(char) * v->str_length+1);
@@ -235,10 +216,14 @@ size_t _strarray_expand(StrArray* v) {
 		return 0;
 	}
 	
-	// pre allocate memory for the ne members
+	// pre allocate memory for the new members
 	size_t i;
 	for (i=v->size; i<v->size+v->_add; i++) {
-		v->elements[i] = (char*) v->_null; // malloc(sizeof(char) * (v->str_length + 1));
+		v->elements[i] = malloc(sizeof(char) * (v->str_length + 1));
+		if (v->elements[i] == NULL) {
+			_strarray_errno = 1;
+			return 0;
+		}
 	}
 	
 	// make sure size matches the actual number of allocated array members
