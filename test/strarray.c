@@ -77,8 +77,6 @@ StrArray* strarray_init(size_t num_elements, size_t str_length) {
  * You must check that the length of element does not exceed the 
  * internal str_length.
  * 
- * FIXME: check the size of the input string and make sure it fits into the target when adding an elements
- *
  * @param v 
  * the string array to add the element to
  * 
@@ -100,10 +98,13 @@ size_t strarray_add(StrArray* v, char* element) {
 	// if no memory is allocated, do this now
 	if (v->elements[v->count] == v->_null || v->elements[v->count] == NULL) {
 		//free(v->elements[v->count]);
-		v->elements[v->count] = malloc(sizeof(char)*(strlen(element)+1));
+		v->elements[v->count] = malloc(sizeof(char)*(v->str_length+1));
 	}
 
-	// FIXME: if memory was allocated, free it and add data
+	// check the size of the input string and make sure it fits into the target
+	// when adding an elements
+	if (strlen(element) > v->str_length)
+		return 0;
 
 	// copy string into pre-allocated memory inside this object
 	memcpy(v->elements[v->count], element, sizeof(char) * v->str_length+1);

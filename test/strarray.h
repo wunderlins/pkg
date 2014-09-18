@@ -18,6 +18,9 @@
  * (c) 2014, Simon Wunderlin <swunderlin()gmailDTcom>
  */
 
+/**
+ * lame attempt to define a null value for an array element
+ */
 const char* _strarray_null = "";
 
 /**
