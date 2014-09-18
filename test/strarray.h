@@ -11,10 +11,6 @@
  * allocated to store new members of the string array. lenght of strings is
  * fixed and set upon initialisation.
  *
- * TODO: add get_length method
- * TODO: add find method
- * TODO: add possibility to ad by reference
- *
  * (c) 2014, Simon Wunderlin <swunderlin()gmailDTcom>
  */
 
@@ -41,8 +37,6 @@ typedef struct {
  *
  * Initialize memory for a strarray and return pointer to object. Will
  * return NULL upon error (usually because memory could not be allocated).
- *
- * TODO: might want to use errno upon error?
  *
  * @param num_elements
  * This is the number of array elements we are allocating memory for
