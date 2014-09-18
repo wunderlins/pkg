@@ -11,6 +11,7 @@
  * allocated to store new members of the string array. lenght of strings is
  * fixed and set upon initialisation.
  *
+ * TODO: might want to use errno upon error?
  * TODO: add get_length method
  * TODO: add find method
  * TODO: add possibility to ad by reference
@@ -29,8 +30,6 @@
  * Initialize memory for a strarray and return pointer to object. Will
  * return NULL upon error (usually because memory could not be allocated).
  *
- * TODO: might want to use errno upon error?
- *
  * @param num_elements
  * This is the number of array elements we are allocating memory for
  *
@@ -40,6 +39,7 @@
  * @return strarray* on success or NULL
  */
 StrArray* strarray_init(size_t num_elements, size_t str_length) {
+	_strarray_errno = 0;
 	
 	// allocate memory for the struct that we will return
 	StrArray* v = malloc(sizeof(StrArray));
@@ -53,15 +53,20 @@ StrArray* strarray_init(size_t num_elements, size_t str_length) {
 	
 	// allocate enough pointers for the strings 
 	v->elements = malloc( sizeof(char*) * v->size );
-	if (v->elements == NULL)
+	if (v->elements == NULL) {
+		_strarray_errno = 1;
 		return NULL;
+	}
 	
 	// allocate space for each array element
 	int i;
 	for (i=0; i<v->size; i++) {
 		v->elements[i] = (char*) v->_null; // malloc(sizeof(char) * (v->str_length + 1));
-		if (v->elements[i] == NULL)
+		/*
+		if (v->elements[i] == NULL) {
 			return NULL;
+		}
+		*/
 	}
 	
 	return v;
@@ -86,25 +91,34 @@ StrArray* strarray_init(size_t num_elements, size_t str_length) {
  * @return size_t number of elements (length) in the array or 0 on error (usually mem allocation problem)
  */
 size_t strarray_add(StrArray* v, char* element) {
+	_strarray_errno = 0;
 	
 	// check if the array is full
 	if (v->count+1 > v->size) {
 		// extend array
 		size_t r = _strarray_expand(v);
-		if (r == 0)
+		if (r == 0) {
+			_strarray_errno = 2;
 			return 0;
+		}
 	}
 	
 	// if no memory is allocated, do this now
 	if (v->elements[v->count] == v->_null || v->elements[v->count] == NULL) {
 		//free(v->elements[v->count]);
 		v->elements[v->count] = malloc(sizeof(char)*(v->str_length+1));
+		if (v->elements[v->count] == NULL) {
+			_strarray_errno = 1;
+			return 0;
+		}
 	}
 
 	// check the size of the input string and make sure it fits into the target
 	// when adding an elements
-	if (strlen(element) > v->str_length)
+	if (strlen(element) > v->str_length) {
+		_strarray_errno = 3;
 		return 0;
+	}
 
 	// copy string into pre-allocated memory inside this object
 	memcpy(v->elements[v->count], element, sizeof(char) * v->str_length+1);
@@ -133,12 +147,16 @@ size_t strarray_add(StrArray* v, char* element) {
  * @return size_t number of elements (length) in the array or 0 on error (usually mem allocation problem)
  */
 size_t strarray_set(StrArray* v, char* element, size_t pos) {
+	_strarray_errno = 0;
 	
 	while (pos > v->size) {
 		// extend array
 		size_t r = _strarray_expand(v);
-		if (r == 0)
+		if (r == 0) {
+			_strarray_errno = 2;
 			return 0;
+		}
+			
 	}
 	
 	//printf("Expanded\n");
@@ -146,7 +164,11 @@ size_t strarray_set(StrArray* v, char* element, size_t pos) {
 	// if no memory is allocated, do this now
 	if (v->elements[pos] == v->_null || v->elements[pos] == NULL) {
 		//free(v->elements[v->count]);
-		v->elements[pos] = malloc(sizeof(char)*(strlen(element)+1));
+		v->elements[pos] = malloc(sizeof(char)*(v->str_length+1));
+		if (v->elements[pos] == NULL) {
+			_strarray_errno = 1;
+			return 0;
+		}
 	}
 	
 	// copy string into pre-allocated memory inside this object
@@ -172,10 +194,14 @@ size_t strarray_set(StrArray* v, char* element, size_t pos) {
  * @return size_t number of elements (length) in the array or 0 on error (usually mem allocation problem)
  */
 size_t strarray_remove(StrArray* v, size_t pos) {
+	_strarray_errno = 0;
+	
 	size_t i = 0;
 	// check if element exists
-	if (pos >= v->count)
+	if (pos >= v->count) {
+		_strarray_errno = 4;
 		return 0;
+	}
 	
 	char* removed = v->elements[pos];
 	
@@ -199,20 +225,21 @@ size_t strarray_remove(StrArray* v, size_t pos) {
  * @return size_t number allocated elements in the array or 0 on error (usually mem allocation problem)
  */
 size_t _strarray_expand(StrArray* v) {
+	_strarray_errno = 0;
 	
 	// try to allocate more memory for data		
 	v->elements = realloc(v->elements, sizeof(char*) * (v->_add + v->size));
 	
 	// if it failed return 0
-	if (v->elements == NULL)
+	if (v->elements == NULL) {
+		_strarray_errno = 1;
 		return 0;
+	}
 	
 	// pre allocate memory for the ne members
 	size_t i;
 	for (i=v->size; i<v->size+v->_add; i++) {
 		v->elements[i] = (char*) v->_null; // malloc(sizeof(char) * (v->str_length + 1));
-		if (v->elements[i] == NULL)
-			return 0;
 	}
 	
 	// make sure size matches the actual number of allocated array members
@@ -251,33 +278,90 @@ void strarray_display(StrArray* v) {
 }
 
 /**
+ * checks if there was an error
+ * 
+ * @return 1 on success, 0 if there is an unhandled error
+ */
+int strarray_error() {
+	return (_strarray_errno) ? 0 : 1;
+}
+
+/**
+ * get the error description
+ * 
+ * @return error description
+ */
+const char* strarray_errstr() {
+	_strarray_errno = 0;
+	
+	if (_strarray_errno+1 > STRARRAY_ERR_MAX) {
+		_strarray_errno = 5;
+		return NULL;
+	}
+	
+	return _strarray_errstr[_strarray_errno];
+}
+
+/**
  * Example usage
  */
 int main(int argc, char** argv) {
-	
+	int res = 0;
 	// allocate strarray
+	// FIXME: when number of allocated arrays is 1 (1st param) then the program will segfault. smells like a bounds error somewhere
 	StrArray* v = strarray_init(10, 15);
+	if (v == NULL) {
+		fprintf(stdout, "Error: %d %s\n", _strarray_errno, strarray_errstr());
+		return 1;
+	}
 	
 	// populate the array with dummy data
 	int i;
 	char* str = malloc(sizeof(char)*16);
 	memcpy(str, "0123456789000--", 16);
 	for (i=0; i<12; i++) {
-		strarray_add(v, str);
+		res = strarray_add(v, str);
+		if (res == 0) {
+			fprintf(stdout, "Error: %d %s\n", _strarray_errno, strarray_errstr());
+			return 1;
+		}
 	}
 	
-	strarray_set(v, "12345", 19);
-	strarray_set(v, "12345", 4);
-	strarray_set(v, "12345", 13);
+	res = strarray_set(v, "12345", 19);
+	if (res == 0) {
+		fprintf(stdout, "Error: %d %s\n", _strarray_errno, strarray_errstr());
+		return 1;
+	}
 	
+	res = strarray_set(v, "12345", 4);
+	if (res == 0) {
+		fprintf(stdout, "Error: %d %s\n", _strarray_errno, strarray_errstr());
+		return 1;
+	}
+	
+	res = strarray_set(v, "12345", 13);
+	if (res == 0) {
+		fprintf(stdout, "Error: %d %s\n", _strarray_errno, strarray_errstr());
+		return 1;
+	}
+		
 	// free the original string
 	free(str);
 	
 	//strarray_display(v);
 
-	strarray_remove(v, 12);
-	strarray_remove(v, 8);
-
+	res = strarray_remove(v, 12);
+	if (res == 0) {
+		fprintf(stdout, "Error: %d %s\n", _strarray_errno, strarray_errstr());
+		return 1;
+	}
+	
+	res = strarray_remove(v, 8);
+	if (res == 0) {
+		fprintf(stdout, "Error: %d %s\n", _strarray_errno, strarray_errstr());
+		return 1;
+	}
+	
 	// display all array elements fro mthe array
 	printf("Memory location of strarray: %p\n", v);
 	strarray_display(v);

@@ -18,6 +18,17 @@
  * lame attempt to define a null value for an array element
  */
 const char* _strarray_null = "";
+int _strarray_errno = 0; // global variables are always extern?
+#define STRARRAY_ERR_MAX 6
+#define STRARRAY_ERR_LENGTH 50
+const char _strarray_errstr[STRARRAY_ERR_MAX][STRARRAY_ERR_LENGTH] = {
+		/*  0 */ "",
+		/*  1 */ "Failed to allocate memory",
+		/*  2 */ "_strarray_expand failed",
+		/*  3 */ "Internal string length too short for input",
+		/*  4 */ "remove failed, index larger than array size",
+		/*  5 */ "Unknown error number",
+};
 
 /**
  * This structure holds an array of strings including the number of items,
@@ -122,6 +133,20 @@ size_t _strarray_expand(StrArray* v);
  * the string array to add the element to
  */
 void strarray_free(StrArray* v);
+
+/**
+ * checks if there was an error
+ * 
+ * @return 1 on success, 0 if there is an unhandled error
+ */
+int strarray_error();
+
+/**
+ * get the error description
+ * 
+ * @return error description
+ */
+const char* strarray_errstr();
 
 /**
  * display the contents of the array line by line
