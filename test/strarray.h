@@ -18,9 +18,27 @@
  * lame attempt to define a null value for an array element
  */
 const char* _strarray_null = "";
+
+/**
+ * error number
+ * 
+ * every method that can return 0 or null will set an error number before returning in this variable.
+ */
 int _strarray_errno = 0; // global variables are always extern?
+
+/**
+ * max number of error messages
+ */
 #define STRARRAY_ERR_MAX 6
+
+/**
+ * Error message maximum string length (including \0)
+ */
 #define STRARRAY_ERR_LENGTH 50
+
+/**
+ * Error messages
+ */
 const char _strarray_errstr[STRARRAY_ERR_MAX][STRARRAY_ERR_LENGTH] = {
 		/*  0 */ "",
 		/*  1 */ "Failed to allocate memory",

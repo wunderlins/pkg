@@ -11,7 +11,6 @@
  * allocated to store new members of the string array. lenght of strings is
  * fixed and set upon initialisation.
  *
- * TODO: might want to use errno upon error?
  * TODO: add get_length method
  * TODO: add find method
  * TODO: add possibility to ad by reference
@@ -373,4 +372,3 @@ int main(int argc, char** argv) {
 	
 	return 0;
 }
-
