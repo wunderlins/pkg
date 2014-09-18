@@ -271,20 +271,14 @@ size_t strarray_remove(StrArray* v, size_t pos) {
 	// check if element exists
 	if (pos >= v->count)
 		return 0;
-
-	// if it exists, free memory
-	//if (v->elements[pos] != v->_null && v->elements[pos] != NULL)
-	//	free(v->elements[pos]);
-
+	
+	char* removed = v->elements[pos];
+	
 	// move all subsequent elements to the front by one
 	for(i=pos; i < v->count-1; i++)
 		v->elements[i] = v->elements[i+1];
 
-	// update count
-	// FIXME: fix bug with last array element after remove, set _null to empty elements
-	//if (v->elements[v->count-1] != v->_null && v->elements[v->count-1] != NULL)
-	//	free(v->elements[v->count-1]);
-
+	v->elements[v->count-1] = removed;
 	return --(v->count);
 }
 
