@@ -1,5 +1,5 @@
-.PHONY: vector
+.PHONY: strarray
 
 
-vector:
-	gcc -o vector vector.c
+strarray:
+	gcc -o strarray strarray.c
