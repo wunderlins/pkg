@@ -46,13 +46,13 @@ StrArray* strarray_init(size_t num_elements, size_t str_length) {
 	StrArray* v = malloc(sizeof(StrArray));
 	
 	// set attributes
-	v->count = 0;
-	v->size = 0; // set to num_elements after calling _strarray_expand
+	v->length = 0;
+	v->_memsize = 0; // set to num_elements after calling _strarray_expand
 	v->_add = num_elements;
 	v->str_length = str_length;
 	
 	// allocate enough pointers for the strings 
-	v->elements = malloc( sizeof(char*) * v->size );
+	v->elements = malloc( sizeof(char*) * v->_memsize );
 	if (v->elements == NULL) {
 		_strarray_errno = 1;
 		return NULL;
@@ -88,8 +88,8 @@ StrArray* strarray_init(size_t num_elements, size_t str_length) {
  */
 size_t strarray_add(StrArray* v, char* element) {
 	_strarray_errno = 0;
-	size_t r = strarray_set(v, element, v->count);
-	return v->count;
+	size_t r = strarray_set(v, element, v->length);
+	return v->length;
 }
 
 /**
@@ -112,7 +112,7 @@ size_t strarray_add(StrArray* v, char* element) {
 size_t strarray_set(StrArray* v, char* element, size_t pos) {
 	_strarray_errno = 0;
 	
-	while (pos >= v->size) {
+	while (pos >= v->_memsize) {
 		// extend array
 		size_t r = _strarray_expand(v);
 		if (r == 0) {
@@ -133,10 +133,10 @@ size_t strarray_set(StrArray* v, char* element, size_t pos) {
 	
 	//printf("Added\n");
 	
-	if (pos+1 > v->count)
-		v->count = pos+1;
+	if (pos+1 > v->length)
+		v->length = pos+1;
 	
-	return v->count;
+	return v->length;
 }
 
 /**
@@ -155,7 +155,7 @@ size_t strarray_remove(StrArray* v, size_t pos) {
 	
 	size_t i = 0;
 	// check if element exists
-	if (pos >= v->count) {
+	if (pos >= v->length) {
 		_strarray_errno = 4;
 		return 0;
 	}
@@ -163,11 +163,11 @@ size_t strarray_remove(StrArray* v, size_t pos) {
 	char* removed = v->elements[pos];
 	
 	// move all subsequent elements to the front by one
-	for(i=pos; i < v->count-1; i++)
+	for(i=pos; i < v->length-1; i++)
 		v->elements[i] = v->elements[i+1];
 
-	v->elements[v->count-1] = removed;
-	return --(v->count);
+	v->elements[v->length-1] = removed;
+	return --(v->length);
 }
 
 /**
@@ -185,7 +185,7 @@ size_t _strarray_expand(StrArray* v) {
 	_strarray_errno = 0;
 	
 	// try to allocate more memory for data		
-	v->elements = realloc(v->elements, sizeof(char*) * (v->_add + v->size));
+	v->elements = realloc(v->elements, sizeof(char*) * (v->_add + v->_memsize));
 	
 	// if it failed return 0
 	if (v->elements == NULL) {
@@ -195,7 +195,7 @@ size_t _strarray_expand(StrArray* v) {
 	
 	// pre allocate memory for the new members
 	size_t i;
-	for (i=v->size; i<v->size+v->_add; i++) {
+	for (i=v->_memsize; i<v->_memsize+v->_add; i++) {
 		v->elements[i] = malloc(sizeof(char) * (v->str_length + 1));
 		//printf("idx %d\n", i);
 		if (v->elements[i] == NULL) {
@@ -207,9 +207,9 @@ size_t _strarray_expand(StrArray* v) {
 	}
 	
 	// make sure size matches the actual number of allocated array members
-	v->size += v->_add;
+	v->_memsize += v->_add;
 	
-	return v->size;
+	return v->_memsize;
 }
 
 /**
@@ -236,7 +236,7 @@ void strarray_free(StrArray* v) {
 void strarray_display(StrArray* v) {
 	// loop over all set elements and display them.
 	size_t i;
-	for (i=0; i<v->count; i++) {
+	for (i=0; i<v->length; i++) {
 		printf("%lu %p: %s\n", i, v->elements[i], v->elements[i]);
 	}
 }
@@ -331,7 +331,7 @@ int main(int argc, char** argv) {
 	// display all array elements from the array
 	printf("Memory location of strarray: %p\n", v);
 	strarray_display(v);
-	printf("Array dimensions: %lu, count %lu\n", v->size, v->count);
+	printf("Array dimensions: %lu, count %lu\n", v->_memsize, v->length);
 	
 	// release the memory, destroy the object and it's data
 	strarray_free(v);

@@ -48,8 +48,8 @@ const char _strarray_errstr[STRARRAY_ERR_MAX][STRARRAY_ERR_LENGTH] = {
  * allocated memory and length of string elements
  */
 typedef struct {
-	size_t count;      // number of elements
-	size_t size;       // number of possible elements
+	size_t length;     // number of elements
+	size_t _memsize;   // number of possible elements
 	size_t _add;       // number of elements to add if the array is full
 	size_t str_length; // length of a single array element
 	char** elements;   // actual data
