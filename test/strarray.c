@@ -272,12 +272,12 @@ const char* strarray_errstr() {
 int main(int argc, char** argv) {
 	int res = 0;
 	// allocate strarray
-	StrArray* v = strarray_init(2, 15);
+	StrArray* v = strarray_init(1, 15);
 	if (v == NULL) {
 		fprintf(stdout, "Error: %d %s\n", _strarray_errno, strarray_errstr());
 		return 1;
 	}
-	printf("after init\n");
+	//printf("after init\n");
 	
 	// populate the array with dummy data
 	int i;
@@ -291,7 +291,7 @@ int main(int argc, char** argv) {
 			return 1;
 		}
 	}
-	printf("done allocating\n");
+	//printf("done allocating\n");
 	
 	res = strarray_set(v, "12345", 19);
 	if (res == 0) {
@@ -316,7 +316,6 @@ int main(int argc, char** argv) {
 	
 	//strarray_display(v);
 	
-	/*
 	res = strarray_remove(v, 12);
 	if (res == 0) {
 		fprintf(stdout, "Error: %d %s\n", _strarray_errno, strarray_errstr());
@@ -328,9 +327,8 @@ int main(int argc, char** argv) {
 		fprintf(stdout, "Error: %d %s\n", _strarray_errno, strarray_errstr());
 		return 1;
 	}
-	*/
 	
-	// display all array elements fro mthe array
+	// display all array elements from the array
 	printf("Memory location of strarray: %p\n", v);
 	strarray_display(v);
 	printf("Array dimensions: %lu, count %lu\n", v->size, v->count);
