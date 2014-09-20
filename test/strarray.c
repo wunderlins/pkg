@@ -24,6 +24,8 @@
 #include <string.h>
 #include "strarray.h"
 
+#define STRARRAY_DEBUG 0
+
 /**
  * Initialize
  *
@@ -42,6 +44,9 @@ StrArray* strarray_init(size_t num_elements, size_t str_length) {
 	_strarray_errno = 0;
 	
 	// allocate memory for the struct that we will return
+#if STRARRAY_DEBUG > 0
+	printf("allocating mem for StrArray\n");
+#endif
 	StrArray* v = malloc(sizeof(StrArray));
 	
 	// set attributes
@@ -51,6 +56,9 @@ StrArray* strarray_init(size_t num_elements, size_t str_length) {
 	v->str_length = str_length;
 	
 	// allocate enough pointers for the strings 
+#if STRARRAY_DEBUG > 0
+	printf("allocating mem for elements: %d\n", v->size);
+#endif
 	v->elements = malloc( sizeof(char*) * v->size );
 	if (v->elements == NULL) {
 		_strarray_errno = 1;
@@ -62,6 +70,9 @@ StrArray* strarray_init(size_t num_elements, size_t str_length) {
 	int i;
 	for (i=0; i<v->size; i++) {
 		v->elements[i] = malloc(sizeof(char) * (v->str_length + 1));
+#if STRARRAY_DEBUG > 0
+		printf("allocating mem for element: %d\n", i);
+#endif
 		if (v->elements[i] == NULL) {
 			_strarray_errno = 1;
 			return NULL;
@@ -138,7 +149,7 @@ size_t strarray_add(StrArray* v, char* element) {
 size_t strarray_set(StrArray* v, char* element, size_t pos) {
 	_strarray_errno = 0;
 	
-	while (pos > v->size) {
+	while (pos >= v->size) {
 		// extend array
 		size_t r = _strarray_expand(v);
 		if (r == 0) {
@@ -292,24 +303,26 @@ const char* strarray_errstr() {
 int main(int argc, char** argv) {
 	int res = 0;
 	// allocate strarray
-	// FIXME: when number of allocated arrays is 1 (1st param) then the program will segfault. smells like a bounds error somewhere
-	StrArray* v = strarray_init(10, 15);
+	StrArray* v = strarray_init(1, 15);
 	if (v == NULL) {
 		fprintf(stdout, "Error: %d %s\n", _strarray_errno, strarray_errstr());
 		return 1;
 	}
+	printf("after init\n");
 	
 	// populate the array with dummy data
 	int i;
 	char* str = malloc(sizeof(char)*16);
 	memcpy(str, "0123456789000--", 16);
 	for (i=0; i<12; i++) {
+		printf("copy element: %d\n", i);
 		res = strarray_add(v, str);
 		if (res == 0) {
 			fprintf(stdout, "Error: %d %s\n", _strarray_errno, strarray_errstr());
 			return 1;
 		}
 	}
+	printf("done allocating\n");
 	
 	res = strarray_set(v, "12345", 19);
 	if (res == 0) {
