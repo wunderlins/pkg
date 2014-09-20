@@ -11,10 +11,9 @@
  * allocated to store new members of the string array. lenght of strings is
  * fixed and set upon initialisation.
  * 
- * TODO: variable length array, allocate all memory
+ * TODO: variable length array or allocate all memory
  * TODO: add get_length method
  * TODO: add find method
- * TODO: add possibility to ad by reference
  *
  * (c) 2014, Simon Wunderlin <swunderlin()gmailDTcom>
  */
@@ -44,39 +43,26 @@ StrArray* strarray_init(size_t num_elements, size_t str_length) {
 	_strarray_errno = 0;
 	
 	// allocate memory for the struct that we will return
-#if STRARRAY_DEBUG > 0
-	printf("allocating mem for StrArray\n");
-#endif
 	StrArray* v = malloc(sizeof(StrArray));
 	
 	// set attributes
 	v->count = 0;
-	v->size = num_elements;
+	v->size = 0; // set to num_elements after calling _strarray_expand
 	v->_add = num_elements;
 	v->str_length = str_length;
 	
 	// allocate enough pointers for the strings 
-#if STRARRAY_DEBUG > 0
-	printf("allocating mem for elements: %d\n", v->size);
-#endif
 	v->elements = malloc( sizeof(char*) * v->size );
 	if (v->elements == NULL) {
 		_strarray_errno = 1;
 		return NULL;
 	}
 	
-	// allocate space for each array element
-	// TODO: use _strarray_expand to initialize all elements
-	int i;
-	for (i=0; i<v->size; i++) {
-		v->elements[i] = malloc(sizeof(char) * (v->str_length + 1));
-#if STRARRAY_DEBUG > 0
-		printf("allocating mem for element: %d\n", i);
-#endif
-		if (v->elements[i] == NULL) {
-			_strarray_errno = 1;
-			return NULL;
-		}
+	// allocate mem for the first batch of strings
+	size_t r = _strarray_expand(v);
+	if (r == 0) {
+		_strarray_errno = 2;
+		return NULL;
 	}
 	
 	return v;
@@ -156,7 +142,6 @@ size_t strarray_set(StrArray* v, char* element, size_t pos) {
 			_strarray_errno = 2;
 			return 0;
 		}
-			
 	}
 	
 	// FIXME: check new string length
