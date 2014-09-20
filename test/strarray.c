@@ -88,30 +88,7 @@ StrArray* strarray_init(size_t num_elements, size_t str_length) {
  */
 size_t strarray_add(StrArray* v, char* element) {
 	_strarray_errno = 0;
-	
-	// check if the array is full
-	if (v->count+1 > v->size) {
-		// extend array
-		size_t r = _strarray_expand(v);
-		if (r == 0) {
-			_strarray_errno = 2;
-			return 0;
-		}
-	}
-	
-	// check the size of the input string and make sure it fits into the target
-	// when adding an elements
-	if (strlen(element) > v->str_length) {
-		_strarray_errno = 3;
-		return 0;
-	}
-
-	// copy string into pre-allocated memory inside this object
-	memcpy(v->elements[v->count], element, sizeof(char) * v->str_length+1);
-	
-	// remeber the new element count
-	v->count++;
-	
+	size_t r = strarray_set(v, element, v->count);
 	return v->count;
 }
 
@@ -150,8 +127,6 @@ size_t strarray_set(StrArray* v, char* element, size_t pos) {
 		_strarray_errno = 3;
 		return 0;
 	}
-	
-	// FIXME: make strarray_add() use strarray_set() (this function)
 	
 	// copy string into pre-allocated memory inside this object
 	memcpy(v->elements[pos], element, sizeof(char) * v->str_length+1);
