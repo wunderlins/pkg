@@ -144,7 +144,13 @@ size_t strarray_set(StrArray* v, char* element, size_t pos) {
 		}
 	}
 	
-	// FIXME: check new string length
+	// check the size of the input string and make sure it fits into the target
+	// when adding an elements
+	if (strlen(element) > v->str_length) {
+		_strarray_errno = 3;
+		return 0;
+	}
+	
 	// FIXME: make strarray_add() use strarray_set() (this function)
 	
 	// copy string into pre-allocated memory inside this object
