@@ -1,6 +1,6 @@
 # GOAL: compile only platform specific functionality to keep it small
 
-.PHONY: changelog
+.PHONY: changelog vector
 
 VERSION = "0.2.1"
 CC      = gcc
@@ -53,3 +53,6 @@ test_pks:
 changelog:
 	./tools/gitlog-to-changelog > doc/Changelog
 	cat doc/Changelog.svn >> doc/Changelog
+
+strarray:
+	$(MAKE) -C test/ strarray
