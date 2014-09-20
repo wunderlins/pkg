@@ -124,19 +124,6 @@ size_t strarray_set(StrArray* v, char* element, size_t pos);
 size_t strarray_remove(StrArray* v, size_t pos);
 
 /**
- * Make storage larger
- *
- * This function will automatically enlarge ->elements if required. The value use
- * to enlarge the data storage is as large as the initial num_elements.
- *
- * @param v
- * the string array to add the element to
- *
- * @return size_t number allocated elements in the array or 0 on error (usually mem allocation problem)
- */
-size_t _strarray_expand(StrArray* v);
-
-/**
  * Free data
  *
  * Use this before free-ing the struct itself.

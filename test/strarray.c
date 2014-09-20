@@ -26,6 +26,48 @@
 #define STRARRAY_DEBUG 0
 
 /**
+ * Make storage larger
+ *
+ * This function will automatically enlarge ->elements if required. The value use
+ * to enlarge the data storage is as large as the initial num_elements.
+ *
+ * @param v 
+ * the string array to add the element to
+ * 
+ * @return size_t number allocated elements in the array or 0 on error (usually mem allocation problem)
+ */
+size_t _strarray_expand(StrArray* v) {
+	_strarray_errno = 0;
+	
+	// try to allocate more memory for data		
+	v->elements = realloc(v->elements, sizeof(char*) * (v->_add + v->_memsize));
+	
+	// if it failed return 0
+	if (v->elements == NULL) {
+		_strarray_errno = 1;
+		return 0;
+	}
+	
+	// pre allocate memory for the new members
+	size_t i;
+	for (i=v->_memsize; i<v->_memsize+v->_add; i++) {
+		v->elements[i] = malloc(sizeof(char) * (v->str_length + 1));
+		//printf("idx %d\n", i);
+		if (v->elements[i] == NULL) {
+			_strarray_errno = 1;
+			return 0;
+		}
+		// set initial value to empty string
+		v->elements[i][0] = '\0';
+	}
+	
+	// make sure size matches the actual number of allocated array members
+	v->_memsize += v->_add;
+	
+	return v->_memsize;
+}
+
+/**
  * Initialize
  *
  * Initialize memory for a strarray and return pointer to object. Will
@@ -168,48 +210,6 @@ size_t strarray_remove(StrArray* v, size_t pos) {
 
 	v->elements[v->length-1] = removed;
 	return --(v->length);
-}
-
-/**
- * Make storage larger
- *
- * This function will automatically enlarge ->elements if required. The value use
- * to enlarge the data storage is as large as the initial num_elements.
- *
- * @param v 
- * the string array to add the element to
- * 
- * @return size_t number allocated elements in the array or 0 on error (usually mem allocation problem)
- */
-size_t _strarray_expand(StrArray* v) {
-	_strarray_errno = 0;
-	
-	// try to allocate more memory for data		
-	v->elements = realloc(v->elements, sizeof(char*) * (v->_add + v->_memsize));
-	
-	// if it failed return 0
-	if (v->elements == NULL) {
-		_strarray_errno = 1;
-		return 0;
-	}
-	
-	// pre allocate memory for the new members
-	size_t i;
-	for (i=v->_memsize; i<v->_memsize+v->_add; i++) {
-		v->elements[i] = malloc(sizeof(char) * (v->str_length + 1));
-		//printf("idx %d\n", i);
-		if (v->elements[i] == NULL) {
-			_strarray_errno = 1;
-			return 0;
-		}
-		// set initial value to empty string
-		v->elements[i][0] = '\0';
-	}
-	
-	// make sure size matches the actual number of allocated array members
-	v->_memsize += v->_add;
-	
-	return v->_memsize;
 }
 
 /**
