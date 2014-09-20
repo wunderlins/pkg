@@ -32,6 +32,19 @@ int _strarray_errno = 0; // global variables are always extern?
 #define STRARRAY_ERR_LENGTH 50
 
 /**
+ * enable debug output (greater than 0)
+ */
+#define STRARRAY_DEBUG 0
+
+/**
+ * enable testcase
+ * 
+ * This will also compile a main method in the library file for for testing the
+ * lib on it's own. 
+ */
+#define STRARRAY_TESTCASE 0
+
+/**
  * Error messages
  */
 const char _strarray_errstr[STRARRAY_ERR_MAX][STRARRAY_ERR_LENGTH] = {

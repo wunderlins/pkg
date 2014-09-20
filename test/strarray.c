@@ -22,8 +22,6 @@
 #include <string.h>
 #include "strarray.h"
 
-#define STRARRAY_DEBUG 0
-
 /**
  * Make storage larger
  *
@@ -266,6 +264,20 @@ const char* strarray_errstr() {
 }
 
 /**
+ * Number of elements in the array
+ * 
+ * @param v
+ * the string array to add the element to
+ * 
+ * @return size_t number of elements (length) in the array 
+ */
+size_t strarray_length(StrArray* v) {
+	return v->_length;
+}
+
+#if STRARRAY_TESTCASE > 0
+
+/**
  * Example usage
  */
 int main(int argc, char** argv) {
@@ -338,15 +350,4 @@ int main(int argc, char** argv) {
 	
 	return 0;
 }
-
-/**
- * Number of elements in the array
- * 
- * @param v
- * the string array to add the element to
- * 
- * @return size_t number of elements (length) in the array 
- */
-size_t strarray_length(StrArray* v) {
-	return v->_length;
-}
+#endif
