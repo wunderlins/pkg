@@ -1,5 +1,4 @@
 .PHONY: strarray
 
-
 strarray:
-	gcc -o strarray strarray.c
+	gcc -DSTRARRAY_TESTCASE=1 -o strarray strarray.c

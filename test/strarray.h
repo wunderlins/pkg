@@ -42,7 +42,9 @@ int _strarray_errno = 0; // global variables are always extern?
  * This will also compile a main method in the library file for for testing the
  * lib on it's own. 
  */
+#ifndef STRARRAY_TESTCASE
 #define STRARRAY_TESTCASE 0
+#endif
 
 /**
  * Error messages
