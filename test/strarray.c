@@ -231,10 +231,13 @@ size_t _strarray_expand(StrArray* v) {
 	size_t i;
 	for (i=v->size; i<v->size+v->_add; i++) {
 		v->elements[i] = malloc(sizeof(char) * (v->str_length + 1));
+		//printf("idx %d\n", i);
 		if (v->elements[i] == NULL) {
 			_strarray_errno = 1;
 			return 0;
 		}
+		// set initial value to empty string
+		v->elements[i][0] = '\0';
 	}
 	
 	// make sure size matches the actual number of allocated array members
@@ -303,7 +306,7 @@ const char* strarray_errstr() {
 int main(int argc, char** argv) {
 	int res = 0;
 	// allocate strarray
-	StrArray* v = strarray_init(1, 15);
+	StrArray* v = strarray_init(2, 15);
 	if (v == NULL) {
 		fprintf(stdout, "Error: %d %s\n", _strarray_errno, strarray_errstr());
 		return 1;
@@ -315,7 +318,7 @@ int main(int argc, char** argv) {
 	char* str = malloc(sizeof(char)*16);
 	memcpy(str, "0123456789000--", 16);
 	for (i=0; i<12; i++) {
-		printf("copy element: %d\n", i);
+		//printf("copy element: %d\n", i);
 		res = strarray_add(v, str);
 		if (res == 0) {
 			fprintf(stdout, "Error: %d %s\n", _strarray_errno, strarray_errstr());
@@ -346,7 +349,8 @@ int main(int argc, char** argv) {
 	free(str);
 	
 	//strarray_display(v);
-
+	
+	/*
 	res = strarray_remove(v, 12);
 	if (res == 0) {
 		fprintf(stdout, "Error: %d %s\n", _strarray_errno, strarray_errstr());
@@ -358,6 +362,7 @@ int main(int argc, char** argv) {
 		fprintf(stdout, "Error: %d %s\n", _strarray_errno, strarray_errstr());
 		return 1;
 	}
+	*/
 	
 	// display all array elements fro mthe array
 	printf("Memory location of strarray: %p\n", v);
