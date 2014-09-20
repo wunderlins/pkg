@@ -1,6 +1,6 @@
 # GOAL: compile only platform specific functionality to keep it small
 
-.PHONY: changelog vector
+.PHONY: changelog strarray
 
 VERSION = "0.2.1"
 CC      = gcc
@@ -55,4 +55,5 @@ changelog:
 	cat doc/Changelog.svn >> doc/Changelog
 
 strarray:
-	$(MAKE) -C test/ strarray
+	$(CC) $(CCFLAGS) -DSTRARRAY_TESTCASE=1 -o strarray strarray.c
+	

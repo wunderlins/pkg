@@ -126,8 +126,10 @@ StrArray* strarray_init(size_t num_elements, size_t str_length) {
  * @return size_t number of elements (length) in the array or 0 on error (usually mem allocation problem)
  */
 size_t strarray_add(StrArray* v, char* element) {
-	_strarray_errno = 0;
+	//_strarray_errno = 0;
 	size_t r = strarray_set(v, element, v->_length);
+	if (r == 0)
+		return 0;
 	return v->_length;
 }
 
