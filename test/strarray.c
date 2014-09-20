@@ -12,7 +12,6 @@
  * fixed and set upon initialisation.
  * 
  * TODO: variable length array or allocate all memory
- * TODO: add get_length method
  * TODO: add find method
  *
  * (c) 2014, Simon Wunderlin <swunderlin()gmailDTcom>
@@ -88,7 +87,7 @@ StrArray* strarray_init(size_t num_elements, size_t str_length) {
 	StrArray* v = malloc(sizeof(StrArray));
 	
 	// set attributes
-	v->length = 0;
+	v->_length = 0;
 	v->_memsize = 0; // set to num_elements after calling _strarray_expand
 	v->_add = num_elements;
 	v->str_length = str_length;
@@ -130,8 +129,8 @@ StrArray* strarray_init(size_t num_elements, size_t str_length) {
  */
 size_t strarray_add(StrArray* v, char* element) {
 	_strarray_errno = 0;
-	size_t r = strarray_set(v, element, v->length);
-	return v->length;
+	size_t r = strarray_set(v, element, v->_length);
+	return v->_length;
 }
 
 /**
@@ -175,10 +174,10 @@ size_t strarray_set(StrArray* v, char* element, size_t pos) {
 	
 	//printf("Added\n");
 	
-	if (pos+1 > v->length)
-		v->length = pos+1;
+	if (pos+1 > v->_length)
+		v->_length = pos+1;
 	
-	return v->length;
+	return v->_length;
 }
 
 /**
@@ -197,7 +196,7 @@ size_t strarray_remove(StrArray* v, size_t pos) {
 	
 	size_t i = 0;
 	// check if element exists
-	if (pos >= v->length) {
+	if (pos >= v->_length) {
 		_strarray_errno = 4;
 		return 0;
 	}
@@ -205,11 +204,11 @@ size_t strarray_remove(StrArray* v, size_t pos) {
 	char* removed = v->elements[pos];
 	
 	// move all subsequent elements to the front by one
-	for(i=pos; i < v->length-1; i++)
+	for(i=pos; i < v->_length-1; i++)
 		v->elements[i] = v->elements[i+1];
 
-	v->elements[v->length-1] = removed;
-	return --(v->length);
+	v->elements[v->_length-1] = removed;
+	return --(v->_length);
 }
 
 /**
@@ -236,7 +235,7 @@ void strarray_free(StrArray* v) {
 void strarray_display(StrArray* v) {
 	// loop over all set elements and display them.
 	size_t i;
-	for (i=0; i<v->length; i++) {
+	for (i=0; i<v->_length; i++) {
 		printf("%lu %p: %s\n", i, v->elements[i], v->elements[i]);
 	}
 }
@@ -331,11 +330,23 @@ int main(int argc, char** argv) {
 	// display all array elements from the array
 	printf("Memory location of strarray: %p\n", v);
 	strarray_display(v);
-	printf("Array dimensions: %lu, count %lu\n", v->_memsize, v->length);
+	printf("Array dimensions: %lu, count %lu\n", v->_memsize, v->_length);
 	
 	// release the memory, destroy the object and it's data
 	strarray_free(v);
 	free(v);
 	
 	return 0;
+}
+
+/**
+ * Number of elements in the array
+ * 
+ * @param v
+ * the string array to add the element to
+ * 
+ * @return size_t number of elements (length) in the array 
+ */
+size_t strarray_length(StrArray* v) {
+	return v->_length;
 }

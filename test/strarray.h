@@ -48,7 +48,7 @@ const char _strarray_errstr[STRARRAY_ERR_MAX][STRARRAY_ERR_LENGTH] = {
  * allocated memory and length of string elements
  */
 typedef struct {
-	size_t length;     // number of elements
+	size_t _length;    // number of elements
 	size_t _memsize;   // number of possible elements
 	size_t _add;       // number of elements to add if the array is full
 	size_t str_length; // length of a single array element
@@ -156,3 +156,13 @@ const char* strarray_errstr();
  * the string array to add the element to
  */
 void strarray_display(StrArray* v);
+
+/**
+ * Number of elements in the array
+ * 
+ * @param v
+ * the string array to add the element to
+ * 
+ * @return size_t number of elements (length) in the array 
+ */
+size_t strarray_length(StrArray* v);
