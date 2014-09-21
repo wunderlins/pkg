@@ -220,8 +220,10 @@ size_t strarray_remove(StrArray* v, size_t pos) {
  * the string array to add the element to
  */
 void strarray_free(StrArray* v) {
+	// FIXME: release all pre-allocated strings
 	// free the elements array, after this call no elements will be available
 	free(v->elements);
+	// FIXME: release v itself
 }
 
 /**
