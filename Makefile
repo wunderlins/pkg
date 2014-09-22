@@ -55,5 +55,5 @@ changelog:
 	cat doc/Changelog.svn >> doc/Changelog
 
 strarray:
-	$(CC) $(CCFLAGS) -DSTRARRAY_TESTCASE=1 -o strarray strarray.c
+	$(CC) $(CCFLAGS) -DSTRARRAY_TESTCASE=1 -o lib/strarray lib/strarray.c
 	
