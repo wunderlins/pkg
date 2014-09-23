@@ -19,6 +19,7 @@
 #include <stdlib.h> // used for realloc
 
 #include <inttypes.h> // required on linux for uintN_t
+#include "strarray.h"
 
 #define STRINGIFY(x) #x
 #define TOSTRING(x) STRINGIFY(x)
