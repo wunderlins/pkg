@@ -37,7 +37,7 @@ size_t _strarray_expand(StrArray* v) {
 	_strarray_errno = 0;
 	
 	// try to allocate more memory for data		
-	v->elements = realloc(v->elements, sizeof(char*) * (v->_add + v->_memsize));
+	v->elements = (char**) realloc(v->elements, sizeof(char*) * (v->_add + v->_memsize));
 	
 	// if it failed return 0
 	if (v->elements == NULL) {
@@ -48,7 +48,7 @@ size_t _strarray_expand(StrArray* v) {
 	// pre allocate memory for the new members
 	size_t i;
 	for (i=v->_memsize; i<v->_memsize+v->_add; i++) {
-		v->elements[i] = malloc(sizeof(char) * (v->str_length + 1));
+		v->elements[i] = (char*) malloc(sizeof(char) * (v->str_length + 1));
 		//printf("idx %d\n", i);
 		if (v->elements[i] == NULL) {
 			_strarray_errno = 1;
@@ -82,7 +82,7 @@ StrArray* strarray_init(size_t num_elements, size_t str_length) {
 	_strarray_errno = 0;
 	
 	// allocate memory for the struct that we will return
-	StrArray* v = malloc(sizeof(StrArray));
+	StrArray* v = (StrArray*) malloc(sizeof(StrArray));
 	
 	// set attributes
 	v->_length = 0;
@@ -91,7 +91,7 @@ StrArray* strarray_init(size_t num_elements, size_t str_length) {
 	v->str_length = str_length;
 	
 	// allocate enough pointers for the strings 
-	v->elements = malloc( sizeof(char*) * v->_memsize );
+	v->elements = (char**) malloc( sizeof(char*) * v->_memsize );
 	if (v->elements == NULL) {
 		_strarray_errno = 1;
 		return NULL;
@@ -296,7 +296,7 @@ int main(int argc, char** argv) {
 	
 	// populate the array with dummy data
 	int i;
-	char* str = malloc(sizeof(char)*16);
+	char* str = (char*) malloc(sizeof(char)*16);
 	memcpy(str, "0123456789000--", 16);
 	for (i=0; i<12; i++) {
 		//printf("copy element: %d\n", i);
