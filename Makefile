@@ -1,6 +1,6 @@
 # GOAL: compile only platform specific functionality to keep it small
 
-.PHONY: changelog strarray
+.PHONY: changelog strarray all vpointer
 
 VERSION = "0.2.1"
 CC      = gcc
@@ -56,4 +56,7 @@ changelog:
 
 strarray:
 	$(CC) $(CCFLAGS) -DSTRARRAY_TESTCASE=1 -o lib/strarray lib/strarray.c
+
+vpointer:
+	$(CC) $(CCFLAGS) -o vpointer vpointer.c
 	
