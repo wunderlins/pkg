@@ -406,6 +406,13 @@ int main(int argc, char **argv, char **envp) {
 		case 'i': mode = INSTALL;    break; // pki - install package with name \$1
 		default: usage(); return 4;         // catch unknown modes
 	}
+
+	// abort if there isn't a command defined
+	if (strcmp(commands[mode], "") == 0) {
+		printf("Command not available on this platform\n");
+		exit(0);
+	}
+
 	
 	// buffer remaining command line arguments and parameters
 	char *params = "";
