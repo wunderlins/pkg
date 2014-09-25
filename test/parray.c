@@ -6,7 +6,12 @@
  * methods add items, the main array should grow to the desired size
  */
 
+#include <stdlib.h>
+#include <stdio.h>
+
+#ifndef PARRAY_TESTCASE
 #define PARRAY_TESTCASE 0
+#endif
 
 /**
  * This structure holds an array of pointers including the number of items
@@ -18,7 +23,7 @@ typedef struct {
 	char** elements;  // actual data
 } parray;
 
-parray* parray_init();
+parray* parray_init(void* type);
 size_t parray_set(parray* p, size_t pos);
 size_t parray_add(parray* p, size_t pos); // do we need add if we have set?
 size_t parray_shrink(parray* p, size_t pos);
