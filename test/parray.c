@@ -219,7 +219,7 @@ int main() {
 			//int p = ((st_t*) p2->elements[l])->i;
 			printf("%d: %s\n", ((st_t*) p2->elements[l])->i, ((st_t*) p2->elements[l])->str);
 		} else
-			printf("NULL\n");
+			printf("(null)\n");
 	
 	return 0;
 }
