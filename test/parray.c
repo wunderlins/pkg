@@ -3,7 +3,10 @@
  * 
  * GOAL:
  * create a set of functions which will allocate a pointer array. if 
- * methods add items, the main array should grow to the desired size
+ * methods add items, the main array should grow to the desired size.
+ * 
+ *
+ * (c) 2014, Simon Wunderlin <simonATwunderlinDTnet>
  */
 
 #include <stdlib.h>
@@ -12,6 +15,21 @@
 #ifndef PARRAY_TESTCASE
 #define PARRAY_TESTCASE 0
 #endif
+
+#define PARRAY_ERR_MAX 6
+#define PARRAY_ERR_LENGTH 50
+
+/**
+ * Error messages
+ */
+const char _parray_errstr[PARRAY_ERR_MAX][PARRAY_ERR_LENGTH] = {
+	/*  0 */ "",
+	/*  1 */ "Failed to allocate memory",
+	/*  2 */ "_strarray_expand failed",
+	/*  3 */ "Internal string length too short for input",
+	/*  4 */ "remove failed, index larger than array size",
+	/*  5 */ "Unknown error number",
+};
 
 int _parray_errno = 0;
 
@@ -28,6 +46,7 @@ typedef struct {
 
 parray* parray_init(size_t psize, size_t expand);
 size_t parray_set(parray* p, void* element, size_t pos); // if pos == 0, append
+const char* parray_errstr();
 //size_t parray_free(parray* p);
 
 /**
@@ -113,6 +132,7 @@ parray* parray_init(size_t psize, size_t expand) {
 size_t parray_set(parray* v, void* element, size_t pos) {
 	_parray_errno = 0;
 	
+	// expand array if required
 	while (pos >= v->allocated) {
 		// extend array
 		size_t r = _parray_expand(v);
@@ -133,14 +153,32 @@ size_t parray_set(parray* v, void* element, size_t pos) {
 	return v->length;
 }
 
+/**
+ * get the error description
+ *
+ * @return error description
+ */
+const char* parray_errstr() {
+	_parray_errno = 0;
+	
+	if (_parray_errno+1 > PARRAY_ERR_MAX) {
+		_parray_errno = 5;
+		return NULL;
+	}
+	
+	return _parray_errstr[_parray_errno];
+}
+
 #ifdef PARRAY_TESTCASE
 #if PARRAY_TESTCASE > 0
 int main() {
 	
+	// initialize a test char array with an initial size of 10 elements
 	parray* p = parray_init(sizeof(char*), 10);
 	
+	// set 2 test elements
 	parray_set(p, "abc1", 0);
-	parray_set(p, "abc2", 11);
+	parray_set(p, "abc2", 10);
 	
 	printf("length    %ld\nallocated %ld\nadd       %ld\n",
 	       p->length, p->allocated, p->expand);
