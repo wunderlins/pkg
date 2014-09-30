@@ -41,7 +41,7 @@ typedef struct {
 	size_t length;    // number of elements
 	size_t allocated; // allocated memory
 	size_t expand;    // number of elements to add if the array is full
-	char** elements;  // actual data
+	void** elements;  // actual data
 } parray;
 
 parray* parray_init(size_t psize, size_t expand);
@@ -66,7 +66,7 @@ size_t _parray_expand(parray* v) {
 	
 	// try to allocate more memory for data
 	size_t s = v->_psize * (v->expand + v->allocated);
-	v->elements = (char**) realloc(v->elements, s);
+	v->elements = (void**) realloc(v->elements, s);
 	
 	// if realloc failed return 0
 	if (v->elements == NULL) {
@@ -100,7 +100,14 @@ size_t _parray_expand(parray* v) {
  * @return parray* on success or NULL
  */
 parray* parray_init(size_t psize, size_t expand) {
+	_parray_errno = 0;
+	
 	parray* v = (parray*) malloc(sizeof(parray));
+	// if realloc failed return 0
+	if (v == NULL) {
+		_parray_errno = 1;
+		return NULL;
+	}
 	
 	// set attributes
 	v->length = 0;
@@ -173,12 +180,12 @@ const char* parray_errstr() {
 #if PARRAY_TESTCASE > 0
 int main() {
 	
-	// initialize a test char array with an initial size of 10 elements
-	parray* p = parray_init(sizeof(char*), 10);
+	// initialize a test char array with an initial size of 5 elements
+	parray* p = parray_init(sizeof(char*), 5);
 	
 	// set 2 test elements
 	parray_set(p, "abc1", 0);
-	parray_set(p, "abc2", 10);
+	parray_set(p, "abc2", 3);
 	
 	printf("length    %ld\nallocated %ld\nadd       %ld\n",
 	       p->length, p->allocated, p->expand);
@@ -187,6 +194,30 @@ int main() {
 	for (l=0; l<p->allocated; l++)
 		printf("%ld %s\n", l, p->elements[l]);
 	
+	if (p->elements[3] == NULL)
+		printf("Element 3 is empty\n");
+	else
+		printf("Element 3 is: %s\n", p->elements[3]);
+	
+	
+	// let's try with a struct
+	typedef struct {
+		uint8_t i;
+		char* str;
+	} st_t;
+	
+	parray* p2 = parray_init(sizeof(st_t), 5);
+	
+	st_t st1 = {5, "abcd"};
+	parray_set(p2, &st1, 0);
+	
+	/*
+	for (l=0; l<p2->allocated; l++)
+		if (p2->elements[l] != NULL)
+			printf("%d: \n", p2->elements[l]->i );
+		else
+			printf("NULL\n");
+	*/
 	return 0;
 }
 #endif
