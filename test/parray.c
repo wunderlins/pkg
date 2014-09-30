@@ -208,16 +208,19 @@ int main() {
 	
 	parray* p2 = parray_init(sizeof(st_t), 5);
 	
-	st_t st1 = {5, "abcd"};
+	st_t st1 = {0, "abcd"};
+	st_t st2 = {2, "a--bcd"};
 	parray_set(p2, &st1, 0);
+	parray_set(p2, &st2, 2);
 	
-	/*
+	printf("\nStruct example:\n");
 	for (l=0; l<p2->allocated; l++)
-		if (p2->elements[l] != NULL)
-			printf("%d: \n", p2->elements[l]->i );
-		else
+		if (p2->elements[l] != NULL) {
+			//int p = ((st_t*) p2->elements[l])->i;
+			printf("%d: %s\n", ((st_t*) p2->elements[l])->i, ((st_t*) p2->elements[l])->str);
+		} else
 			printf("NULL\n");
-	*/
+	
 	return 0;
 }
 #endif
