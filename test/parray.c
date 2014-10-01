@@ -213,6 +213,28 @@ int main() {
 	parray_set(p2, &st1, 0);
 	parray_set(p2, &st2, 2);
 	
+	/*
+	 NOTE: this is not supported on void pointers and will result in unpredictable
+	       behaviour. The element length on a void pointer is unknown)
+	 */
+	st_t* x = p2->elements[0];
+	//x++; x++; x++;
+	
+	/** this attempt results in memory corruption. interestingly we get valid data 
+	 from another program. possible local exploit ?
+	 
+	 This attempt is probably dangerous, because it might end in a segmentation 
+	 fault.
+	 */
+	st_t* x1 = (st_t*) p2->elements[0];
+	x1 += sizeof(st_t*);
+	x1 += sizeof(st_t*);
+	
+	
+	printf("\nPointer arythmetics\n");
+	printf("%d %s\n", x1->i, x1->str);
+	
+	
 	printf("\nStruct example:\n");
 	for (l=0; l<p2->allocated; l++)
 		if (p2->elements[l] != NULL) {
