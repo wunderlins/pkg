@@ -65,7 +65,8 @@ size_t _parray_expand(parray* v) {
 	size_t i = 0;
 	
 	// try to allocate more memory for data
-	size_t s = v->_psize * (v->expand + v->allocated);
+	//size_t s = v->_psize * (v->expand + v->allocated);
+	size_t s = sizeof(void*) * (v->expand + v->allocated);
 	v->elements = (void**) realloc(v->elements, s);
 	
 	// if realloc failed return 0
@@ -192,17 +193,19 @@ int main() {
 	
 	size_t l = 0;
 	for (l=0; l<p->allocated; l++)
-		printf("%ld %s\n", l, p->elements[l]);
+		printf("%ld %s\n", l, (char*) p->elements[l]);
 	
 	if (p->elements[3] == NULL)
 		printf("Element 3 is empty\n");
 	else
-		printf("Element 3 is: %s\n", p->elements[3]);
+		printf("Element 3 is: %s\n", (char*) p->elements[3]);
 	
+	
+	printf("element 3: %s\n", (char*) *(p->elements + 3));
 	
 	// let's try with a struct
 	typedef struct {
-		uint8_t i;
+		int i;
 		char* str;
 	} st_t;
 	
@@ -213,19 +216,23 @@ int main() {
 	parray_set(p2, &st1, 0);
 	parray_set(p2, &st2, 2);
 	
+	printf("\nPointer arythmetics\n");
+	//printf("%d %s\n",  *(p2->elements + 2)->i, *(p2->elements + 2)->str);
+	printf("%d: %s\n", ((st_t*) *(p2->elements + 2))->i, ((st_t*) *(p2->elements + 2))->str);
+	
 	/*
 	 NOTE: this is not supported on void pointers and will result in unpredictable
 	       behaviour. The element length on a void pointer is unknown)
-	 */
+	 * /
 	st_t* x = p2->elements[0];
 	//x++; x++; x++;
 	
-	/** this attempt results in memory corruption. interestingly we get valid data 
+	/ ** this attempt results in memory corruption. interestingly we get valid data 
 	 from another program. possible local exploit ?
 	 
 	 This attempt is probably dangerous, because it might end in a segmentation 
 	 fault.
-	 */
+	 * /
 	st_t* x1 = (st_t*) p2->elements[0];
 	x1 += sizeof(st_t*);
 	x1 += sizeof(st_t*);
@@ -242,6 +249,7 @@ int main() {
 			printf("%d: %s\n", ((st_t*) p2->elements[l])->i, ((st_t*) p2->elements[l])->str);
 		} else
 			printf("(null)\n");
+	*/
 	
 	return 0;
 }
