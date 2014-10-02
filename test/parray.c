@@ -221,6 +221,27 @@ int main() {
 	printf("%d: %s\n", ((st_t*) *(p2->elements + 2))->i, ((st_t*) *(p2->elements + 2))->str);
 	
 	/*
+	printf("\nNested structs\n");
+	typedef struct {
+		int type;
+		char* name;
+		st_t** recs;
+	} rs_t;
+	
+	// allocate mem
+	
+	rs_t* r = (rs_t*) malloc(sizeof(rs_t));
+	r->recs = malloc(sizeof(st_t) * 10); // allocating 10 recs
+	
+	st_t* p3;
+	p3 = (st_t*) *(r->recs + 0);
+	p3->i = 3;
+	p3->str = "sdfsdf";
+	((st_t*) *(r->recs + 0))->str = "dadfasdfasdf";
+	printf("p3.i: %d, p3.str: %s\n", p3->i, p3->str);
+	*/
+	
+	/*
 	 NOTE: this is not supported on void pointers and will result in unpredictable
 	       behaviour. The element length on a void pointer is unknown)
 	 * /
