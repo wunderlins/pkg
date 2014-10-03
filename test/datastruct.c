@@ -38,11 +38,11 @@ void dump_s2(s2* st) {
 void dump_s3(s3* st) {
 	printf("length: %d, name: %s\n", st->length, st->name);
 	int i = 0;
-	/*
-	for (i=0; i<st->length; i++) {
-		dump_s1(st->items[i]);
+	
+	for (i=0; i < st->length; i++) {
+		printf("--> %d, ", i);
+		dump_s1( (*st->items + i) );
 	}
-	*/
 	
 }
 
@@ -65,6 +65,10 @@ int main() {
 	i3->name = "recordset";
 	i3->length = 0;
 	i3->items[i3->length++] = i1;
+	s1* i11 = (s1*) malloc(sizeof(s1));
+	i11->i = 5;
+	i11->f = 2.334;
+	i3->items[i3->length++] = i11;
 	//i3->items++;
 	dump_s3(i3);
 	
