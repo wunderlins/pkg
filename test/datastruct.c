@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*
 // simple structure
 typedef struct {
 	int i;
@@ -45,9 +46,61 @@ void dump_s3(s3* st) {
 	}
 	
 }
+*/
+
+typedef enum {
+	ROOT,          // 0
+	NODE,          // 1 
+	NODELIST
+} nodetype_t;
+
+typedef struct {
+	nodetype_t type;
+	int length;
+	void** nodes;
+} root_t;
+
+typedef struct {
+	nodetype_t type;
+	char* name;
+	char* value;
+} node_t;
+
+typedef struct {
+	nodetype_t type;
+	int length;
+	char* name;
+	char* value;
+	void** nodes;
+} nodelist_t;
+
+root_t init_root();
+node_t init_node(char* name, char* value);
+nodelist_t init_nodelist(char* name, char* value);
+
+node_t init_node(char* name, char* value) {
+	node_t n = {
+		.type  = NODE,
+		.name  = name,
+		.value = value
+	};
+	return n;
+}
+
+nodelist_t init_nodelist(char* name, char* value) {
+	nodelist_t n = {
+		.type  = NODELIST,
+		.length = 0,
+		.name  = name,
+		.value = value,
+		.nodes = NULL
+	};
+	return n;
+}
 
 int main() {
 	
+	/*
 	// allocate mem for simple struct
 	s1* i1 = (s1*) malloc(sizeof(s1));
 	i1->i = 10;
@@ -71,8 +124,12 @@ int main() {
 	i3->items[i3->length++] = i11;
 	//i3->items++;
 	dump_s3(i3);
+	*/
 	
+	node_t n0 = init_node("Host", "localhost");
+	node_t n1 = init_node("Port", "8080");
 	
+	printf("%s = %s\n", n0.name, n0.value);
 	
 	return 0;
 }

@@ -8,7 +8,7 @@ strarray:
 	$(CC) $(CCFLAGS) -DSTRARRAY_TESTCASE=1 -o strarray strarray.c
 
 datastruct:
-	$(CC) $(CCFLAGS) -o datastruct datastruct.c
+	$(CC) $(CCFLAGS) -std=c99 -o datastruct datastruct.c
 
 parray:
 	$(CC) $(CCFLAGS) -DPARRAY_TESTCASE=1 -o parray parray.c
