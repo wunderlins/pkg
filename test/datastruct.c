@@ -51,7 +51,7 @@ void dump_s3(s3* st) {
 typedef enum {
 	ROOT,          // 0
 	NODE,          // 1 
-	NODELIST
+	NODELIST       // 2
 } nodetype_t;
 
 typedef struct {
@@ -74,6 +74,13 @@ typedef struct {
 	void** nodes;
 } nodelist_t;
 
+typedef union {
+	root_t root;
+	node_t node;
+	nodelist_t nodelist;
+}	nodeu_t;
+
+/*
 root_t init_root();
 node_t init_node(char* name, char* value);
 nodelist_t init_nodelist(char* name, char* value);
@@ -97,6 +104,7 @@ nodelist_t init_nodelist(char* name, char* value) {
 	};
 	return n;
 }
+*/
 
 int main() {
 	
@@ -126,10 +134,14 @@ int main() {
 	dump_s3(i3);
 	*/
 	
+	/*
 	node_t n0 = init_node("Host", "localhost");
 	node_t n1 = init_node("Port", "8080");
 	
 	printf("%s = %s\n", n0.name, n0.value);
+	*/
+	
+	
 	
 	return 0;
 }

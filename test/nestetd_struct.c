@@ -4,10 +4,18 @@
 typedef struct {
 	char* name;
 	char* value;
-} payload;
+} n;
+
+typedef struct {
+	char* name;
+	char* value;
+	int count;
+	void** children;
+} nlist;
 
 typedef union {
-	payload p;
+	n p;
+	nlist list;
 } node_u;
 
 typedef struct {
