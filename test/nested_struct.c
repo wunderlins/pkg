@@ -84,23 +84,38 @@ int main(int argc, char* argv[]) {
 	n->data->node.name = "name";
 	n->data->node.value = "val";
 	
-	printf("%d: name: %s, value: %s\n", n->type, n->data->node.name, n->data->node.value);
+	printf("%p %d: name: %s, value: %s\n", n, n->type, n->data->node.name, n->data->node.value);
 	
 	node_t* n1 = init_node("name1", NULL);
-	printf("%d: name: %s, value: %s\n", n1->type, n1->data->node.name, n1->data->node.value);
+	printf("%p %d: name: %s, value: %s\n", n1, n1->type, n1->data->node.name, n1->data->node.value);
 	
 	node_t* nl1 = init_nodelist("nl1", "val1");
-	printf("%d: name: %s, value: %s\n", nl1->type, nl1->data->list.name, nl1->data->list.value);
+	printf("%p %d: name: %s, value: %s\n", nl1, nl1->type, nl1->data->list.name, nl1->data->list.value);
 	
 	node_append(nl1, n1);
-	node_t** children = (node_t**) nl1->data->list.children; 
+	node_t** children = (node_t**) nl1->data->list.children;
 	//nl1->data->list.children[0]->data.node->name
-	printf("%d: length: %d, type: %d, name: %s, value: %s\n", nl1->type, 
+	printf("%p %d: length: %d, type: %d, name: %s, value: %s\n", 
+			                                 nl1,
+			                                 nl1->type, 
 			                                 nl1->data->list.length, 
 			                                 children[0]->type,
 			                                 children[0]->data->node.name,
 			                                 children[0]->data->node.value);
-
+	node_t* child = children[0];
+	printf("%p %d: length: %d, type: %d, name: %s, value: %s\n", 
+			                                 nl1, 
+			                                 nl1->type, 
+			                                 nl1->data->list.length, 
+			                                 child->type,
+			                                 child->data->node.name,
+			                                 child->data->node.value);
+	
+	printf("%p %d: name: %s, value: %s\n", 
+	                                    child,
+	                                    child->type, 
+	                                    child->data->node.name, 
+	                                    child->data->node.value);
 	
 	return 0;
 }
