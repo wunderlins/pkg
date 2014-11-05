@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+static int nodeid = 0;
+
 typedef struct {
 	char* name;
 	char* value;
@@ -20,6 +22,7 @@ typedef union {
 } node_u;
 
 typedef struct {
+	int nodeid;
 	enum {
 		UNDEF,   // 0
 		ROOT,    // 1
@@ -31,6 +34,7 @@ typedef struct {
 
 node_t* init_node(char* name, char* value) {
 	node_t* n = malloc(sizeof(node_t));
+	n->nodeid = nodeid++;
 	n->type = NODE;
 	n->data = malloc(sizeof(node_u));
 	n->data->node.name = name;
@@ -40,6 +44,7 @@ node_t* init_node(char* name, char* value) {
 
 node_t* init_nodelist(char* name, char* value) {
 	node_t* n = malloc(sizeof(node_t));
+	n->nodeid = nodeid++;
 	n->type = NODELIST;
 	n->data = malloc(sizeof(node_u));
 	n->data->list.name = name;
@@ -77,31 +82,40 @@ int node_append(node_t* nodelist, node_t* node) {
 	return 0; // success
 }
 
-int node_to_str(char* buffer, node_t* node) {
+char* node_to_str(node_t* node) {
+	char* buffer = malloc(sizeof(char)*101);
+	buffer[0] = '\0';
+	sprintf(buffer, "%p %d ", node, node->nodeid);
+	
 	switch(node->type) {
 		case UNDEF:
-			strcpy(buffer, "Type: UNDEF");
+			strcat(buffer, "UNDEF");
 			break;
 		
 		case ROOT:
-			strcpy(buffer, "Type: ROOT");
+			strcat(buffer, "ROOT");
 			break;
 		
 		case NODE:
-			printf(" %s ", node->data->node.name);
-			strcpy(buffer, "Type: NODE     ");
+			strcat(buffer, "NODE     ");
 			strcat(buffer, "name: ");
 			strcat(buffer, (const char*) node->data->node.name);
 			strcat(buffer, ", value: ");
-			strcat(buffer, (const char*) node->data->node.value);
+			if (node->data->node.value == NULL)
+				strcat(buffer, "(null)");
+			else
+				strcat(buffer, (const char*) node->data->node.value);
 			break;
 		
 		case NODELIST:
-			strcpy(buffer, "Type: NODELIST ");
+			strcat(buffer, "NODELIST ");
 			strcat(buffer, "name: ");
 			strcat(buffer, node->data->list.name);
 			strcat(buffer, ", value: ");
-			strcat(buffer, node->data->list.value);
+			if (node->data->list.value == NULL)
+				strcat(buffer, "(null)");
+			else
+				strcat(buffer, (const char*) node->data->list.value);
 			strcat(buffer, ", length: ");
 			char l[20];
 			sprintf(l, "%d", node->data->list.length);
@@ -109,13 +123,14 @@ int node_to_str(char* buffer, node_t* node) {
 			break;
 	}
 	
-	return 0;
+	return buffer;
 }
 
-
 int main(int argc, char* argv[]) {
-	
+	printf("%d\n", nodeid);
 	node_t* n = malloc(sizeof(node_t));
+	n->nodeid = nodeid++;
+	n->type = NODE;
 	n->data = malloc(sizeof(node_u));
 	n->data->node.name = "name";
 	n->data->node.value = "val";
@@ -153,9 +168,12 @@ int main(int argc, char* argv[]) {
 	                                    child->data->node.name, 
 	                                    child->data->node.value);
 	
-	char nstr[100] = "";
-	node_to_str(nstr, n1);
-	printf("%p %s\n", n1, nstr);
+	//char nstr[100] = "";
+	//node_to_str(nstr, n1);
+	printf("==============================================\n");
+	printf("%s\n", node_to_str(n));
+	printf("%s\n", node_to_str(n1));
+	printf("%s\n", node_to_str(nl1));
 	
 	return 0;
 }
