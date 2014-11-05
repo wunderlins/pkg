@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 
 typedef struct {
@@ -76,6 +77,41 @@ int node_append(node_t* nodelist, node_t* node) {
 	return 0; // success
 }
 
+int node_to_str(char* buffer, node_t* node) {
+	switch(node->type) {
+		case UNDEF:
+			strcpy(buffer, "Type: UNDEF");
+			break;
+		
+		case ROOT:
+			strcpy(buffer, "Type: ROOT");
+			break;
+		
+		case NODE:
+			printf(" %s ", node->data->node.name);
+			strcpy(buffer, "Type: NODE     ");
+			strcat(buffer, "name: ");
+			strcat(buffer, (const char*) node->data->node.name);
+			strcat(buffer, ", value: ");
+			strcat(buffer, (const char*) node->data->node.value);
+			break;
+		
+		case NODELIST:
+			strcpy(buffer, "Type: NODELIST ");
+			strcat(buffer, "name: ");
+			strcat(buffer, node->data->list.name);
+			strcat(buffer, ", value: ");
+			strcat(buffer, node->data->list.value);
+			strcat(buffer, ", length: ");
+			char l[20];
+			sprintf(l, "%d", node->data->list.length);
+			strcat(buffer, l);
+			break;
+	}
+	
+	return 0;
+}
+
 
 int main(int argc, char* argv[]) {
 	
@@ -116,6 +152,10 @@ int main(int argc, char* argv[]) {
 	                                    child->type, 
 	                                    child->data->node.name, 
 	                                    child->data->node.value);
+	
+	char nstr[100] = "";
+	node_to_str(nstr, n1);
+	printf("%p %s\n", n1, nstr);
 	
 	return 0;
 }
