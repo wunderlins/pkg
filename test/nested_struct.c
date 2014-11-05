@@ -16,6 +16,11 @@ typedef struct {
 	void** children; // this is actually of type node_u, but it is declared further down
 } nlist;
 
+typedef struct {
+	int length;
+	void** children; // this is actually of type node_u, but it is declared further down
+} rlist;
+
 typedef union {
 	n node;
 	nlist list;
@@ -54,10 +59,20 @@ node_t* init_nodelist(char* name, char* value) {
 	return n;
 }
 
+node_t* init_root() {
+	node_t* n = malloc(sizeof(node_t));
+	n->nodeid = nodeid++;
+	n->type = ROOT;
+	n->data = malloc(sizeof(node_u));
+	n->data->list.length = 0;
+	n->data->list.children = NULL;
+	return n;
+}
+
 int node_append(node_t* nodelist, node_t* node) {
 	
 	// check if nodelist accepts children
-	if (nodelist->type != NODELIST)
+	if (nodelist->type != NODELIST && nodelist->type != ROOT)
 		return 1;
 	
 	// allocate memory for children
@@ -85,6 +100,7 @@ int node_append(node_t* nodelist, node_t* node) {
 char* node_to_str(node_t* node) {
 	char* buffer = malloc(sizeof(char)*101);
 	buffer[0] = '\0';
+	char l[20];
 	sprintf(buffer, "%p %d ", node, node->nodeid);
 	
 	switch(node->type) {
@@ -93,7 +109,10 @@ char* node_to_str(node_t* node) {
 			break;
 		
 		case ROOT:
-			strcat(buffer, "ROOT");
+			strcat(buffer, "ROOT     ");
+			strcat(buffer, "length: ");
+			sprintf(l, "%d", node->data->list.length);
+			strcat(buffer, l);
 			break;
 		
 		case NODE:
@@ -117,7 +136,6 @@ char* node_to_str(node_t* node) {
 			else
 				strcat(buffer, (const char*) node->data->list.value);
 			strcat(buffer, ", length: ");
-			char l[20];
 			sprintf(l, "%d", node->data->list.length);
 			strcat(buffer, l);
 			break;
@@ -128,6 +146,9 @@ char* node_to_str(node_t* node) {
 
 int main(int argc, char* argv[]) {
 	printf("%d\n", nodeid);
+	
+	node_t* root = init_root(); 
+	
 	node_t* n = malloc(sizeof(node_t));
 	n->nodeid = nodeid++;
 	n->type = NODE;
@@ -136,12 +157,15 @@ int main(int argc, char* argv[]) {
 	n->data->node.value = "val";
 	
 	printf("%p %d: name: %s, value: %s\n", n, n->type, n->data->node.name, n->data->node.value);
+	node_append(root, n);
 	
 	node_t* n1 = init_node("name1", NULL);
 	printf("%p %d: name: %s, value: %s\n", n1, n1->type, n1->data->node.name, n1->data->node.value);
+	node_append(root, n1);
 	
 	node_t* nl1 = init_nodelist("nl1", "val1");
 	printf("%p %d: name: %s, value: %s\n", nl1, nl1->type, nl1->data->list.name, nl1->data->list.value);
+	node_append(root, nl1);
 	
 	node_append(nl1, n1);
 	node_t** children = (node_t**) nl1->data->list.children;
@@ -170,7 +194,8 @@ int main(int argc, char* argv[]) {
 	
 	//char nstr[100] = "";
 	//node_to_str(nstr, n1);
-	printf("==============================================\n");
+	printf("==============================================\n\n");
+	printf("%s\n", node_to_str(root));
 	printf("%s\n", node_to_str(n));
 	printf("%s\n", node_to_str(n1));
 	printf("%s\n", node_to_str(nl1));
