@@ -28,6 +28,7 @@ typedef union {
 
 typedef struct {
 	int nodeid;
+	int has_children;
 	enum {
 		UNDEF,   // 0
 		ROOT,    // 1
@@ -40,6 +41,7 @@ typedef struct {
 node_t* init_node(char* name, char* value) {
 	node_t* n = malloc(sizeof(node_t));
 	n->nodeid = nodeid++;
+	n->has_children = 0;
 	n->type = NODE;
 	n->data = malloc(sizeof(node_u));
 	n->data->node.name = name;
@@ -50,6 +52,7 @@ node_t* init_node(char* name, char* value) {
 node_t* init_nodelist(char* name, char* value) {
 	node_t* n = malloc(sizeof(node_t));
 	n->nodeid = nodeid++;
+	n->has_children = 1;
 	n->type = NODELIST;
 	n->data = malloc(sizeof(node_u));
 	n->data->list.name = name;
@@ -62,6 +65,7 @@ node_t* init_nodelist(char* name, char* value) {
 node_t* init_root() {
 	node_t* n = malloc(sizeof(node_t));
 	n->nodeid = nodeid++;
+	n->has_children = 1;
 	n->type = ROOT;
 	n->data = malloc(sizeof(node_u));
 	n->data->list.length = 0;
@@ -145,15 +149,15 @@ char* node_to_str(char* buffer, node_t* node) {
 }
 
 // recoursive dump
-int node_dump(node_t* root) {
+int node_dump(node_t* root, int indent) {
 	
 	// check if this node has children.
 	
-	retun 0;
+	return 0;
 }
 
 int main(int argc, char* argv[]) {
-	printf("%d\n", nodeid);
+	//printf("%d\n", nodeid);
 	
 	node_t* root = init_root(); 
 	
@@ -211,6 +215,8 @@ int main(int argc, char* argv[]) {
 	printf("%s\n", node_to_str(buffer, n));
 	printf("%s\n", node_to_str(buffer, n1));
 	printf("%s\n", node_to_str(buffer, nl1));
+	
+	node_dump(root, 0);
 	
 	return 0;
 }
