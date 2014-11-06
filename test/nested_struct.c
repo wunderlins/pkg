@@ -160,7 +160,7 @@ int node_dump(node_t* root, int indent) {
 	for (i=0; i < root->data->list.length; i++) {
 		printf("%d %p ", children[i]->nodeid, children[i]);
 		if (children[i]->has_children)
-		printf(" %d", children[i]->data->list.length);
+			printf(" %d", children[i]->data->list.length);
 		printf("\n");
 	}
 	
