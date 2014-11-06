@@ -97,8 +97,8 @@ int node_append(node_t* nodelist, node_t* node) {
 	return 0; // success
 }
 
-char* node_to_str(node_t* node) {
-	char* buffer = malloc(sizeof(char)*101);
+char* node_to_str(char* buffer, node_t* node) {
+	//char* buffer = malloc(sizeof(char)*101);
 	buffer[0] = '\0';
 	char l[20];
 	sprintf(buffer, "%p %d ", node, node->nodeid);
@@ -144,6 +144,14 @@ char* node_to_str(node_t* node) {
 	return buffer;
 }
 
+// recoursive dump
+int node_dump(node_t* root) {
+	
+	// check if this node has children.
+	
+	retun 0;
+}
+
 int main(int argc, char* argv[]) {
 	printf("%d\n", nodeid);
 	
@@ -156,18 +164,20 @@ int main(int argc, char* argv[]) {
 	n->data->node.name = "name";
 	n->data->node.value = "val";
 	
-	printf("%p %d: name: %s, value: %s\n", n, n->type, n->data->node.name, n->data->node.value);
+	// printf("%p %d: name: %s, value: %s\n", n, n->type, n->data->node.name, n->data->node.value);
 	node_append(root, n);
 	
 	node_t* n1 = init_node("name1", NULL);
-	printf("%p %d: name: %s, value: %s\n", n1, n1->type, n1->data->node.name, n1->data->node.value);
+	//printf("%p %d: name: %s, value: %s\n", n1, n1->type, n1->data->node.name, n1->data->node.value);
 	node_append(root, n1);
 	
 	node_t* nl1 = init_nodelist("nl1", "val1");
-	printf("%p %d: name: %s, value: %s\n", nl1, nl1->type, nl1->data->list.name, nl1->data->list.value);
+	//printf("%p %d: name: %s, value: %s\n", nl1, nl1->type, nl1->data->list.name, nl1->data->list.value);
 	node_append(root, nl1);
 	
 	node_append(nl1, n1);
+	
+	/*
 	node_t** children = (node_t**) nl1->data->list.children;
 	//nl1->data->list.children[0]->data.node->name
 	printf("%p %d: length: %d, type: %d, name: %s, value: %s\n", 
@@ -194,11 +204,13 @@ int main(int argc, char* argv[]) {
 	
 	//char nstr[100] = "";
 	//node_to_str(nstr, n1);
+	*/
 	printf("==============================================\n\n");
-	printf("%s\n", node_to_str(root));
-	printf("%s\n", node_to_str(n));
-	printf("%s\n", node_to_str(n1));
-	printf("%s\n", node_to_str(nl1));
+	char buffer[101] = "";
+	printf("%s\n", node_to_str(buffer, root));
+	printf("%s\n", node_to_str(buffer, n));
+	printf("%s\n", node_to_str(buffer, n1));
+	printf("%s\n", node_to_str(buffer, nl1));
 	
 	return 0;
 }
