@@ -152,6 +152,17 @@ char* node_to_str(char* buffer, node_t* node) {
 int node_dump(node_t* root, int indent) {
 	
 	// check if this node has children.
+	if (root->has_children == 0)
+		return 1;
+	
+	int i = 0;
+	node_t** children = (node_t**) root->data->list.children;
+	for (i=0; i < root->data->list.length; i++) {
+		printf("%d %p ", children[i]->nodeid, children[i]);
+		if (children[i]->has_children)
+		printf(" %d", children[i]->data->list.length);
+		printf("\n");
+	}
 	
 	return 0;
 }
