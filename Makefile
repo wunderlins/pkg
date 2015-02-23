@@ -1,24 +1,32 @@
 # GOAL: compile only platform specific functionality to keep it small
 
+.PHONY: changelog strarray all vpointer
+
+VERSION = "0.2.1"
 CC      = gcc
-CCFLAGS = -Wall
+CCFLAGS = -Wall -O3 
 RM      = rm
 #	os      = $(shell uname -o 2>/dev/null || echo 0)
 
 #CCFLAGS += -D OpenBSD
 #CCFLAGS += -D Debian
 
-ifeq ($(shell uname -o),GNU/Linux)
-	OS = Debian
-else 
-	OS = OpenBSD
+ifeq ($(shell uname),Darwin)
+		OS = Darwin
+else
+	ifeq ($(shell uname -o),GNU/Linux)
+		OS = Debian
+	else
+		OS = OpenBSD
+	endif
 endif
 
-CCFLAGS += -D $(OS)
+CCFLAGS += -D $(OS) -D VERSION=$(VERSION)
 
 all:
-	@echo $(OS)
+	@echo "Target OS: " $(OS)
 	$(CC) $(CCFLAGS) -o pk pk.c
+	#strip pk
 	[ ! -h pkm ] && ln -s pk pkm || true
 	[ ! -h pkc ] && ln -s pk pkc || true
 	[ ! -h pku ] && ln -s pk pku || true
@@ -41,3 +49,14 @@ diff:
 
 test_pks:
 	./pks vim
+	
+changelog:
+	./tools/gitlog-to-changelog > doc/Changelog
+	cat doc/Changelog.svn >> doc/Changelog
+
+strarray:
+	$(CC) $(CCFLAGS) -DSTRARRAY_TESTCASE=1 -o lib/strarray lib/strarray.c
+
+vpointer:
+	$(CC) $(CCFLAGS) -o vpointer vpointer.c
+	

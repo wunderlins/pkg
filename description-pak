@@ -2,4 +2,7 @@ Unified Package Manager
 
 The unified Package Manager is an attempt to use the same command line syntax and output with different *NIX package Manager. This version supports: apt-get (Debian and siblings), port (MacPorts) and pacman (Arch Linux). Experimental support for yum/rpm since Rev 101.
 
-$Id: description-pak 151 2011-04-28 18:51:28Z wus $
+Currently supported Platforms:
+  Debian (apt)
+	OpenBSD (port)
+	Darwin (MacPorts)

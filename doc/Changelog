@@ -1,61 +1,88 @@
+2014-09-10  Simon Wunderlin  <swunderlin@gmail.com>
+
+	added partial root checks, need to reconsider.
+
+	Added Darwin implementation (maports).
+
+2014-07-11  wus  <swunderlin@gmail.com>
+
+	added missing newline
+
+2014-07-11  Simon Wunderlin  <wunderlins@users.noreply.github.com>
+
+	Update pk.c
+
+2014-05-18  wus  <swunderlin@gmail.com>
+
+	debugging line parsing, should probably use fgetc
+
+	removed dbg output
+
+	adding output parsing, first addition: line buffer
+
+2014-05-12  Simon Wunderlin  <simon.wunderlin@usb.ch>
+
+	made clean action sh compatible
+
+2014-05-11  wus  <swunderlin@gmail.com>
+
+	added short hash to change log
+
 2014-05-10  wus  <swunderlin@gmail.com>
 
-	[5a56489] added changelog
+	added changelog
 
-	[c791ad3] renamed
+	renamed
 
-	[c296d26] cleanup, implemented proper exit codes
+	cleanup, implemented proper exit codes
 
-	[b2433f3] fixing OS detection
+	fixing OS detection
 
-	[9b0f630] requiring gmake for all systems, too much hassle to have a portable build system with different make or autoconf tools for now
+	requiring gmake for all systems, too much hassle to have a portable build system with different make or autoconf tools for now
 
 2014-05-10  Simon Wunderlin  <simon.wunderlin@usb.ch>
 
-	[bee7cf9] added creation of symlinks in makefile again
+	added creation of symlinks in makefile again
 
-	[fbd6cf7] cleanup, got rid of external files. only pk.c needs to be compiled
+	cleanup, got rid of external files. only pk.c needs to be compiled
 
-	[279b175] removed uneeded files
+	removed uneeded files
 
-	[b4a9ce3] cleanup, moved old stuff to the old folder
+	cleanup, moved old stuff to the old folder
 
-	[59524b4] solved issue with output buffering of popen results
+	solved issue with output buffering of popen results
 
-	[e12d0b6] first working debian mplementation
+	first working debian mplementation
 
-	[0d47139] cleanup
+	cleanup
 
-	[3d189f6] introducing debian support
+	introducing debian support
 
 2014-05-10  wus  <swunderlin@gmail.com>
 
-	[9b3b831] started parameter parsing implementation
+	started parameter parsing implementation
 
 2014-05-08  wus  <swunderlin@gmail.com>
 
-	[4033f99] added TODO
+	added TODO
 
-	[4df4b97] modes index
+	modes index
 
-	[ae19cf2] fixed bug with double delcation of the udate function
+	fixed bug with double delcation of the udate function
 
-	[bf43bac] parameter checking
+	parameter checking
 
-	[6ddd582] added openbsd5 files, added popen implementation
+	added openbsd5 files, added popen implementation
 
 2014-05-08  wus  <wus@openbsd55.intra.wunderlin.net>
 
-	[3a97980] initial setup
+	initial setup
 
-	[9079bec] cleanup
+	cleanup
 
 2013-03-29  wus  <swunderlin@gmail.com>
 
-	[dcbd05a] first commit
-
-
-
+	first commit
 Change Log for file:///home/svn/upkg/TRUNK
 Subversion Revision: 195 2012-01-09 22:17:28 +0100 Simon
 Generation Date: 2012-01-10 22:41:36 +0100
